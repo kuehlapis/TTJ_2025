@@ -11,13 +11,13 @@ repos:
     hooks:
       - id: ruff-check
         args: [ --fix ]
-        files: backend/.
+        files: ^backend/
       - id: ruff-format
-        files: backend/.
+        files: ^backend/
   
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: v9.34.0
     hooks:
       - id: eslint
-        files: frontend/.*\.(ts|tsx|js|jsx)$
+        files: ^frontend/.*\.(js|jsx)$
         args: ["--config", "frontend/eslint.config.js"]
