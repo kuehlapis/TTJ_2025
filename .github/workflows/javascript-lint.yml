@@ -24,4 +24,4 @@ jobs:
         run: npm ci
     
       - name: run eslint
-        run: npx eslint . --ext .js,.jsx --config frontend/eslint.config.js
+        run: npx eslint . --ext .js,.jsx --config eslint.config.js
