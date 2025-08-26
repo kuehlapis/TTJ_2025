@@ -14,4 +14,4 @@ app.add_middleware(
 
 @app.get("/")
 async def read_root():
-    return {"message": "hello"}
+    return {"message": "hi boys"}
