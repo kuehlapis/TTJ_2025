@@ -1,11 +1,14 @@
+from datetime import datetime, timezone, timedelta
+from uuid import uuid4
+from typing import List, Literal, Dict, Optional
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, AnyHttpUrl
-from typing import List, Literal, Dict, Optional
-from uuid import uuid4
-from datetime import datetime, timezone, timedelta
+
 
 app = FastAPI(title="TTJ_2025 API (MVP)", version="0.0.1")
+
 
 # CORS for Vite dev on localhost:5173
 app.add_middleware(
@@ -16,8 +19,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 # ---- In-memory store (MVP only) ----
 STORE: Dict[str, dict] = {}
+
+
 
 class StartAnalysisBody(BaseModel):
     url: AnyHttpUrl
@@ -26,8 +32,10 @@ class StartAnalysisBody(BaseModel):
         "consistency",
         "exceptions",
         "satisfaction",
-        "efficiency"
+        "efficiency",
     ]] = []
+
+
 
 class AnalysisStatus(BaseModel):
     id: str
@@ -42,9 +50,13 @@ class AnalysisStatus(BaseModel):
     # artifacts: List[dict] = []
     # metrics: List[dict] = []
 
+
+
 @app.get("/health")
 def health():
     return {"ok": True, "ts": datetime.now(timezone.utc).isoformat()}
+
+
 
 @app.post("/analyses", response_model=AnalysisStatus)
 def start_analysis(body: StartAnalysisBody):
@@ -54,13 +66,15 @@ def start_analysis(body: StartAnalysisBody):
         "id": aid,
         "url": str(body.url),
         "device": body.device,
-        "status": "running",           # start immediately for demo
+        "status": "running",  # start immediately for demo
         "started_at": now,
         "finished_at": None,
         "overall_score": None,
         "analysis_types": body.analysis_types,
     }
     return AnalysisStatus(**STORE[aid])
+
+
 
 @app.get("/analyses/{analysis_id}", response_model=AnalysisStatus)
 def get_analysis(analysis_id: str):
@@ -78,6 +92,7 @@ def get_analysis(analysis_id: str):
         # TODO: fill in findings/artifacts/metrics later
 
     return AnalysisStatus(**item)
+
 
 # Placeholder routes (commented until implemented)
 # @app.get("/reports"): ...
