@@ -1,0 +1,38 @@
+# Minimal MVP
+fastapi[standard]
+uvicorn[standard]
+pydantic
+
+# ---- comment-in as you build features ----
+# # DB
+# motor
+# beanie
+# SQLAlchemy
+# psycopg[binary]
+
+# # Auth
+# python-jose[cryptography]
+# passlib[bcrypt]
+# email-validator
+
+# # Files / S3
+# boto3
+# python-multipart
+# aiofiles
+
+# # Observability
+# structlog
+# opentelemetry-sdk
+
+# # LLM/VLM
+# pillow
+# numpy
+# # vllm
+# # transformers
+
+# # Async utils
+# aiohttp
+
+# # Reporting
+# pandas
+# reportlab
