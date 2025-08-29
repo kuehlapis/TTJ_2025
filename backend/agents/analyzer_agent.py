@@ -2,6 +2,7 @@ from backend.agents.base_agent import BaseAgent
 import yaml
 from datetime import datetime
 import os
+import json
 
 
 class AnalyzerAgent(BaseAgent):
@@ -30,29 +31,31 @@ class AnalyzerAgent(BaseAgent):
     async def analyze_question(self, user_question: str, jurisdiction: str = None) -> dict:
         """Process user's question using the QA template and legalbook"""
         try:
-            # Prepare the wrapped question using template
             formatted_question = self._wrap_question(user_question, jurisdiction)
-
-            # Prepare messages for LLM
+            print(formatted_question)
+            
             messages = [
                 {"role": "system", "content": self.system_prompt},
                 {"role": "user", "content": formatted_question}
             ]
 
-            # Query LLM with wrapped question and legalbook context
             response = await self.query_llm(messages)
+            
+            # Debug the raw response
+            print("\nDebug - Raw Response:")
+            print(response)
 
-            # Parse and structure the response
-            structured_response = self._structure_response(response)
-
+            # Structure the response immediately
+            structured = self._structure_response(response)
+            
             return {
                 "status": "success",
                 "question": user_question,
-                "analysis": structured_response,
+                "analysis": structured,
                 "timestamp": datetime.now().isoformat()
             }
-
         except Exception as e:
+            print(f"Error in analyze_question: {str(e)}")
             return {
                 "status": "error",
                 "error": str(e),
@@ -70,17 +73,117 @@ class AnalyzerAgent(BaseAgent):
             KB_YAML_SNIPPETS=kb_yaml
         )
 
-    def _structure_response(self, response: str) -> str:
-        """Format the response to ensure it's properly structured"""
-        # If response doesn't follow template format, try to structure it
-        if "**Answer:**" not in response:
-            parts = response.split("\n")
-            structured = [
-                "**Answer:** " + (parts[0] if parts else "Unclear"),
-                "\n**Why:**",
-                "- " + (" ".join(parts[1:]) if len(parts) > 1 else "No additional details provided"),
-                "\n**Confidence:** 0.5",
-                "\n**Disclaimer:** This is general information, not legal advice."
-            ]
-            return "\n".join(structured)
-        return response
+    def _structure_response(self, response: str) -> dict:
+        """Parse and structure the LLM response"""
+        try:
+            # Default structure
+            analysis_dict = {
+                "feature": "",
+                "description": "No description provided",
+                "analysis": "No analysis provided",
+                "risk": "MEDIUM",
+                "regulations": [],
+                "recommendation": "No recommendation provided"
+            }
+            
+            # Clean up the response
+            cleaned_response = response.replace("```json", "").replace("```", "").strip()
+            
+            # Try to parse as JSON first
+            try:
+                if cleaned_response.startswith('{'):
+                    parsed = json.loads(cleaned_response)
+                    # Update only valid fields
+                    for key in analysis_dict.keys():
+                        if key in parsed and parsed[key]:
+                            analysis_dict[key] = parsed[key]
+                    return analysis_dict
+            except json.JSONDecodeError:
+                pass
+
+            # Fallback to line-by-line parsing
+            current_key = None
+            current_value = []
+            
+            for line in cleaned_response.split('\n'):
+                line = line.strip()
+                if not line:
+                    continue
+                
+                # Check for key indicators
+                if ":" in line:
+                    key, value = line.split(":", 1)
+                    key = key.strip().lower().replace('"', '')
+                    value = value.strip().strip('"').strip(',')
+                    
+                    if key in analysis_dict:
+                        if key == "regulations":
+                            if "[" in value:
+                                regs = value.strip("[]").split(",")
+                                analysis_dict["regulations"].extend(r.strip().strip('"') for r in regs if r.strip())
+                        else:
+                            analysis_dict[key] = value
+
+            return analysis_dict
+            
+        except Exception as e:
+            print(f"Error in _structure_response: {str(e)}")
+            return {
+                "feature": "Analysis Failed",
+                "description": "Error processing response",
+                "analysis": f"Error: {str(e)}",
+                "risk": "HIGH",
+                "regulations": [],
+                "recommendation": "Please review input and try again"
+            }
+
+    async def analyze_from_file(self, input_file: str) -> dict:
+        """Analyze case from text file"""
+        try:
+            with open(input_file, 'r') as file:
+                query = file.read().strip()
+            
+            # Process single text input
+            result = await self.analyze_question(query, "EU")
+            return result["analysis"] if result["status"] == "success" else {
+                "feature": "Geo-targeted Advertising",
+                "description": "Analysis failed",
+                "analysis": result["error"],
+                "risk": "HIGH",
+                "regulations": [],
+                "recommendation": "Error occurred during analysis"
+            }
+        except Exception as e:
+            return {
+                "feature": "Error",
+                "description": "File processing error",
+                "analysis": str(e),
+                "risk": "HIGH",
+                "regulations": [],
+                "recommendation": "Check input file and try again"
+            }
+
+async def main():
+    try:
+        analyzer = AnalyzerAgent()
+        input_file = os.path.join(os.path.dirname(__file__), '..', 'data', 'test_inputs.txt')
+        result = await analyzer.analyze_from_file(input_file)
+        
+        print("\nAnalysis Results:")
+        print("================")
+        print(f"Feature: {result.get('feature', 'Not specified')}")
+        print(f"Description: {result.get('description', 'No description')}")
+        print(f"Analysis: {result.get('analysis', 'No analysis')}")
+        print(f"Risk Level: {result.get('risk', 'Not assessed')}")
+        print("Regulations:")
+        for reg in result.get('regulations', []):
+            print(f"  - {reg}")
+        print(f"Recommendation: {result.get('recommendation', 'No recommendation')}")
+        print("-" * 50)
+            
+    except Exception as e:
+        print(f"Error: {str(e)}")
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
