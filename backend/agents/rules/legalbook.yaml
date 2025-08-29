@@ -6,8 +6,8 @@ sources:
     source:
       title: Digital Services Act
       jurisdiction: EU
-      citation_or_id: Regulation (EU) 2022/2065
-      document_type: regulation
+      citation_or_id: Regulation (EU) [2022/2065](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex%3A32022R2065)
+      document_type: statute
       publication_date: 2022-10-27
       effective_date: 2022-11-16
       version_note: null
@@ -39,21 +39,9 @@ sources:
         anchor: Large online platforms
     obligations:
     - subject: online platforms and intermediaries
-      action: disclose to regulators how their algorithms work
-      object: null
-      conditions: []
-      time_windows: []
-      defaults: []
-      exceptions: []
-      deadlines: []
-      anchor: New obligations on platform companies
-      evidence:
-      - quote: In addition to the liability exemptions, the DSA would introduce a
-          wide-ranging set of new obligations on platforms, including some that aim
-          to disclose to regulators how their algorithms work
-        anchor: New obligations on platform companies
-    - subject: online platforms and intermediaries
-      action: provide users with explanations for content moderation decisions
+      action: disclose to regulators how their algorithms work, provide users with
+        explanations for content moderation decisions, and implement stricter controls
+        on targeted advertising
       object: null
       conditions: []
       time_windows: []
@@ -66,23 +54,9 @@ sources:
           work, providing users with explanations for content moderation decisions,
           and implementing stricter controls on targeted advertising.
         anchor: Digital Services Act
-    - subject: online platforms and intermediaries
-      action: implement stricter controls on targeted advertising
-      object: null
-      conditions: []
-      time_windows: []
-      defaults: []
-      exceptions: []
-      deadlines: []
-      anchor: Digital Services Act
-      evidence:
-      - quote: Key requirements include disclosing to regulators how their algorithms
-          work, providing users with explanations for content moderation decisions,
-          and implementing stricter controls on targeted advertising.
-        anchor: Digital Services Act
-    - subject: intermediary service providers
-      action: comply with mandatory "notice-and-action" requirements and respect fundamental
-        rights
+    - subject: platforms
+      action: respect fundamental rights, provide mandatory redress for content removal
+        decisions, and implement a comprehensive risk management and audit framework
       object: null
       conditions: []
       time_windows: []
@@ -91,46 +65,34 @@ sources:
       deadlines: []
       anchor: New obligations on platform companies
       evidence:
-      - quote: A 16 November 2021 _Internet Policy Review_ listed some of new obligations
-          including mandatory "notice-and-action" requirements, for example, respect
-          fundamental rights, mandatory redress for content removal decisions, and
-          a comprehensive risk management and audit framework.
+      - quote: new obligations including mandatory "notice-and-action" requirements,
+          for example, respect fundamental rights, mandatory redress for content removal
+          decisions, and a comprehensive risk management and audit framework.
         anchor: New obligations on platform companies
-    - subject: intermediary service providers
-      action: provide mandatory redress for content removal decisions
-      object: null
+    prohibitions:
+    - subject: Companies
+      forbidden: do not comply with the new obligations
       conditions: []
-      time_windows: []
-      defaults: []
       exceptions: []
-      deadlines: []
+      time_windows: []
       anchor: New obligations on platform companies
       evidence:
-      - quote: A 16 November 2021 _Internet Policy Review_ listed some of new obligations
-          including mandatory "notice-and-action" requirements, for example, respect
-          fundamental rights, mandatory redress for content removal decisions, and
-          a comprehensive risk management and audit framework.
+      - quote: Companies that do not comply with the new obligations risk fines of
+          up to 6% on their global annual turnover.
         anchor: New obligations on platform companies
-    - subject: intermediary service providers
-      action: implement a comprehensive risk management and audit framework
-      object: null
-      conditions: []
-      time_windows: []
-      defaults: []
-      exceptions: []
-      deadlines: []
+    disclosures_reporting:
+    - subject: online platforms
+      requirement: disclose to regulators how their algorithms work
+      frequency: null
+      metrics: []
       anchor: New obligations on platform companies
       evidence:
-      - quote: A 16 November 2021 _Internet Policy Review_ listed some of new obligations
-          including mandatory "notice-and-action" requirements, for example, respect
-          fundamental rights, mandatory redress for content removal decisions, and
-          a comprehensive risk management and audit framework.
+      - quote: the DSA would introduce a wide-ranging set of new obligations on platforms,
+          including some that aim to disclose to regulators how their algorithms work
         anchor: New obligations on platform companies
-    prohibitions: []
-    disclosures_reporting: []
     enforcement:
-      enforcer: European Commission
-      mode: fines
+      enforcer: the European Commission
+      mode: null
       exclusivity: null
       rulemaking:
         required: false
@@ -138,11 +100,18 @@ sources:
         topics: []
       anchor: New obligations on platform companies
       evidence:
-      - quote: Companies that do not comply with the new obligations risk fines of
-          up to 6% on their global annual turnover.
+      - quote: In addition, the Commission can apply periodic penalties up to 5% of
+          the average daily worldwide turnover for each day of delay in complying
+          with remedies, interim measures, and commitments.
         anchor: New obligations on platform companies
     severability: null
-    notes: []
+    notes:
+    - 'LEXICON_RESOLVED: term=DSA; expanded=Digital Services Act; anchor=Digital Services
+      Act; scope=DOCUMENT'
+    - 'LEXICON_RESOLVED: term=VLOPs; expanded=Very Large Online Platforms; anchor=Large
+      online platforms; scope=DOCUMENT'
+    - 'LEXICON_RESOLVED: term=VLOSEs; expanded=Very Large Online Search Engines; anchor=Large
+      online platforms; scope=DOCUMENT'
   California state law:
     url: https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202320240SB976
     version: '1.0'
@@ -151,14 +120,13 @@ sources:
       jurisdiction: US-CA
       citation_or_id: SB-976
       document_type: statute
-      publication_date: '2024-09-23'
+      publication_date: 2024-09-23
       effective_date: null
       version_note: Chaptered 09/05/24
     definitions:
     - term: Addictive feed
-      text: Internet content prioritized for display based on user information, unless
-        certain conditions are met, such as not persistently associating info or consisting
-        of search terms.
+      text: An internet service where media is recommended, selected, or prioritized
+        for display based on user information, unless certain conditions are met.
       anchor: '27000.5'
       evidence:
       - quote: “Addictive feed” means an internet website, online service, online
@@ -167,30 +135,38 @@ sources:
           to a user based...on information provided by the user
         anchor: '27000.5'
     - term: Addictive internet-based service or application
-      text: An internet website, online service, online application, or mobile application
-        that offers users or provides users with an addictive feed as a significant
-        part of the service provided.
+      text: An internet service that offers users an addictive feed as a significant
+        part of the service.
       anchor: '27000.5'
       evidence:
-      - quote: '"Addictive internet-based service or application" means an internet
+      - quote: “Addictive internet-based service or application” means an internet
           website, online service, online application, or mobile application...that
           offers users or provides users with an addictive feed as a significant part
-          of the service provided'
+          of the service provided by that internet website
         anchor: '27000.5'
     - term: Minor
       text: An individual under 18 years of age who is located in the State of California.
       anchor: '27000.5'
       evidence:
-      - quote: '"Minor" means an individual under 18 years of age who is located in
-          the State of California.'
+      - quote: “Minor” means an individual under 18 years of age who is located in
+          the State of California.
         anchor: '27000.5'
     - term: Operator
       text: A person who operates or provides an internet website, an online service,
         an online application, or a mobile application.
       anchor: '27000.5'
       evidence:
-      - quote: '"Operator" means a person who operates or provides an internet website,
-          an online service, an online application, or a mobile application.'
+      - quote: “Operator” means a person who operates or provides an internet website,
+          an online service, an online application, or a mobile application.
+        anchor: '27000.5'
+    - term: User
+      text: A person who uses an internet website, online service, online application,
+        or mobile application, excluding the operator or their agent.
+      anchor: '27000.5'
+      evidence:
+      - quote: “User” means a person who uses an internet website, online service,
+          online application, or mobile application. “User” does not include the operator
+          or a person acting as an agent of the operator.
         anchor: '27000.5'
     obligations:
     - subject: operator of an addictive internet-based service or application
@@ -200,65 +176,55 @@ sources:
       conditions: []
       time_windows: []
       defaults:
-      - setting: child’s access is limited between the hours of 12 a.m. and 6 a.m.,
-          in the user’s local time zone
-        value: on by default
+      - setting: access limitation
+        value: between the hours of 12 a.m. and 6 a.m., in the user’s local time zone
       exceptions: []
       deadlines: []
       anchor: '27002'
       evidence:
-      - quote: 'The operator of an addictive internet-based service or application
+      - quote: The operator of an addictive internet-based service or application
           shall provide a mechanism through which the verified parent of a user who
-          is a minor may do any of the following:
-
-          (1) Prevent their child from accessing or receiving notifications'
+          is a minor may...Prevent their child from accessing or receiving notifications
         anchor: '27002'
     - subject: operator of an addictive internet-based service or application
       action: provide a mechanism through which the verified parent of a user who
         is a minor may limit their child’s access to any addictive feed
-      object: a length of time per day specified by the verified parent
+      object: null
       conditions: []
       time_windows: []
       defaults:
-      - setting: child’s access is limited to one hour per day unless modified by
-          the verified parent
-        value: on by default
+      - setting: access limitation
+        value: one hour per day unless modified by the verified parent
       exceptions: []
       deadlines: []
       anchor: '27002'
       evidence:
-      - quote: 'The operator of an addictive internet-based service or application
+      - quote: The operator of an addictive internet-based service or application
           shall provide a mechanism through which the verified parent of a user who
-          is a minor may do any of the following:
-
-          (2) Limit their child’s access to any addictive feed...to a length of time
-          per day specified by the verified parent.'
+          is a minor may...Limit their child’s access to any addictive feed
         anchor: '27002'
     - subject: operator of an addictive internet-based service or application
       action: provide a mechanism through which the verified parent of a user who
         is a minor may limit their child’s ability to view the number of likes or
         other forms of feedback
-      object: pieces of media within an addictive feed
+      object: null
       conditions: []
       time_windows: []
       defaults:
-      - setting: Limit their child’s ability to view the number of likes or other
-          forms of feedback
+      - setting: limit ability to view likes
         value: on by default
       exceptions: []
       deadlines: []
       anchor: '27002'
       evidence:
-      - quote: 'The operator of an addictive internet-based service or application
+      - quote: The operator of an addictive internet-based service or application
           shall provide a mechanism through which the verified parent of a user who
-          is a minor may do any of the following:
-
-          (3) Limit their child’s ability to view the number of likes or other forms
-          of feedback'
+          is a minor may...Limit their child’s ability to view the number of likes
+          or other forms of feedback
         anchor: '27002'
     - subject: operator of an addictive internet-based service or application
       action: provide a mechanism through which the verified parent of a user who
-        is a minor may require that the default feed provided to the child...be one
+        is a minor may require that the default feed provided to the child be one
         in which pieces of media are not recommended, selected, or prioritized for
         display
       object: null
@@ -269,10 +235,11 @@ sources:
       deadlines: []
       anchor: '27002'
       evidence:
-      - quote: (4) Require that the default feed provided to the child when entering
-          the internet-based service or application be one in which pieces of media
-          are not recommended, selected, or prioritized for display based on information
-          provided by the user
+      - quote: The operator of an addictive internet-based service or application
+          shall provide a mechanism through which the verified parent of a user who
+          is a minor may...Require that the default feed provided to the child...be
+          one in which pieces of media are not recommended, selected, or prioritized
+          for display
         anchor: '27002'
     - subject: operator of an addictive internet-based service or application
       action: provide a mechanism through which the verified parent of a user who
@@ -281,45 +248,76 @@ sources:
       conditions: []
       time_windows: []
       defaults:
-      - setting: Set their child’s account to private mode
+      - setting: account to private mode
         value: on by default
       exceptions: []
       deadlines: []
       anchor: '27002'
       evidence:
-      - quote: (5) Set their child’s account to private mode, in a manner in which
-          only users to whom the child is connected on the addictive internet-based
-          service or application may view or respond to content posted by the child.
+      - quote: The operator of an addictive internet-based service or application
+          shall provide a mechanism through which the verified parent of a user who
+          is a minor may...Set their child’s account to private mode
         anchor: '27002'
+    - subject: Attorney General
+      action: adopt regulations to further the purposes of this chapter, including
+        regulations regarding age assurance and parental consent
+      object: null
+      conditions: []
+      time_windows: []
+      defaults: []
+      exceptions: []
+      deadlines:
+      - relative_to: null
+        date: 2027-01-01
+      anchor: '27006'
+      evidence:
+      - quote: The Attorney General shall adopt regulations to further the purposes
+          of this chapter, including regulations regarding age assurance and parental
+          consent by January 1, 2027.
+        anchor: '27006'
+    - subject: Attorney General
+      action: solicit public comment regarding the impact that any regulation might
+        have based on the nondiscrimination characteristics
+      object: null
+      conditions: []
+      time_windows: []
+      defaults: []
+      exceptions: []
+      deadlines: []
+      anchor: '27006'
+      evidence:
+      - quote: In promulgating the regulations described in subdivision (b), the Attorney
+          General shall solicit public comment regarding the impact that any regulation
+          might have based on the nondiscrimination characteristics
+        anchor: '27006'
     prohibitions:
-    - subject: the operator of an addictive internet-based service or application
+    - subject: operator of an addictive internet-based service or application
       forbidden: provide an addictive feed to a user
       conditions:
-      - the operator does not have actual knowledge that the user is a minor
-      - the operator has not reasonably determined that the user is not a minor, commencing
-        January 1, 2027
-      - the operator has not obtained verifiable parental consent to provide an addictive
-        feed to the user who is a minor
-      exceptions: []
+      - the operator has actual knowledge that the user is a minor
+      - commencing January 1, 2027, the operator has reasonably determined that the
+        user is not a minor
+      exceptions:
+      - The operator has obtained verifiable parental consent to provide an addictive
+        feed to the user who is a minor.
       time_windows: []
       anchor: '27001'
       evidence:
-      - quote: 'It shall be unlawful for the operator of an addictive internet-based
+      - quote: It shall be unlawful for the operator of an addictive internet-based
           service or application to provide an addictive feed to a user unless either
-          of the following is met:
-
-          (1) (A) ...the operator does not have actual knowledge that the user is
-          a minor.'
+          of the following is met
         anchor: '27001'
-    - subject: the operator of an addictive internet-based service or application
+    - subject: operator of an addictive internet-based service or application
       forbidden: send notifications to a user
       conditions:
-      - between the hours of 12 a.m. and 6 a.m., in the user’s local time zone
-      - between the hours of 8 a.m. and 3 p.m., from Monday through Friday from September
+      - between the hours of 12 a.m. and 6 a.m., in the user’s local time zone, and
+        between the hours of 8 a.m. and 3 p.m., from Monday through Friday from September
         through May in the user’s local time zone
-      - the operator has actual knowledge that the user is a minor unless the operator
-        has obtained verifiable parental consent to send those notifications
-      exceptions: []
+      - the operator has actual knowledge that the user is a minor
+      - commencing January 1, 2027, the operator has not reasonably determined that
+        the user is not a minor
+      exceptions:
+      - the operator has obtained verifiable parental consent to send those notifications
       time_windows:
       - start_local: 00:00
         end_local: 06:00
@@ -346,52 +344,39 @@ sources:
       anchor: '27002'
       evidence:
       - quote: it shall be unlawful for the operator of an addictive internet-based
-          service or application, between the hours of 12 a.m. and 6 a.m., in the
-          user’s local time zone, and between the hours of 8 a.m. and 3 p.m., from
-          Monday through Friday from September through May in the user’s local time
-          zone, to send notifications to a user if the operator has actual knowledge
-          that the user is a minor unless the operator has obtained verifiable parental
-          consent to send those notifications.
+          service or application, between the hours of 12 a.m. and 6 a.m....and between
+          the hours of 8 a.m. and 3 p.m., from Monday through Friday from September
+          through May...to send notifications to a user
         anchor: '27002'
     disclosures_reporting:
-    - subject: An operator of an addictive internet-based service or application
-      requirement: publicly disclose, on an annual basis, the number of minor users
-        of its addictive internet-based service or application, and of that total
-        the number for whom the operator has received verifiable parental consent
-        to provide an addictive feed, and the number of minor users as to whom the
-        controls set forth in Section 27002 are or are not enabled.
-      frequency: annually
-      metrics:
-      - number of minor users
-      - number of minor users with verifiable parental consent
-      - number of minor users with Section 27002 controls enabled/disabled
+    - subject: operator of an addictive internet-based service or application
+      requirement: publicly disclose the number of minor users of its addictive internet-based
+        service or application, and of that total the number for whom the operator
+        has received verifiable parental consent to provide an addictive feed, and
+        the number of minor users as to whom the controls set forth in Section 27002
+        are or are not enabled
+      frequency: annual basis
+      metrics: []
       anchor: '27005'
       evidence:
       - quote: An operator of an addictive internet-based service or application shall
           publicly disclose, on an annual basis, the number of minor users of its
-          addictive internet-based service or application, and of that total the number
-          for whom the operator has received verifiable parental consent to provide
-          an addictive feed, and the number of minor users as to whom the controls
-          set forth in Section 27002 are or are not enabled.
+          addictive internet-based service or application
         anchor: '27005'
     enforcement:
-      enforcer: the Attorney General
+      enforcer: Attorney General
       mode: civil action
       exclusivity: true
       rulemaking:
         required: true
-        by_date: '2027-01-01'
+        by_date: 2027-01-01
         topics:
         - age assurance
         - parental consent
       anchor: '27006'
       evidence:
-      - quote: 'This chapter may only be enforced in a civil action brought in the
+      - quote: This chapter may only be enforced in a civil action brought in the
           name of the people of the State of California by the Attorney General.
-
-          (b) The Attorney General shall adopt regulations to further the purposes
-          of this chapter, including regulations regarding age assurance and parental
-          consent by January 1, 2027.'
         anchor: '27006'
     severability: true
     notes: []
@@ -406,20 +391,60 @@ sources:
       publication_date: null
       effective_date: '2025-01-01'
       version_note: null
-    definitions: []
-    obligations: []
-    prohibitions:
+    obligations:
     - subject: social media platforms
-      forbidden: to prohibit certain minors from creating new accounts
+      action: prohibit certain minors from creating new accounts
+      object: null
       conditions: []
-      exceptions: []
       time_windows: []
+      defaults: []
+      exceptions: []
+      deadlines: []
       anchor: 'CS/CS/HB 3: Online Protections for Minors'
       evidence:
       - quote: Requiring social media platforms to prohibit certain minors from creating
           new accounts
         anchor: 'CS/CS/HB 3: Online Protections for Minors'
-    disclosures_reporting: []
+    - subject: social media platforms
+      action: terminate certain accounts
+      object: null
+      conditions: []
+      time_windows: []
+      defaults: []
+      exceptions: []
+      deadlines: []
+      anchor: 'CS/CS/HB 3: Online Protections for Minors'
+      evidence:
+      - quote: requiring social media platforms to terminate certain accounts
+        anchor: 'CS/CS/HB 3: Online Protections for Minors'
+    - subject: social media platforms
+      action: provide additional options for termination of such accounts
+      object: null
+      conditions: []
+      time_windows: []
+      defaults: []
+      exceptions: []
+      deadlines: []
+      anchor: 'CS/CS/HB 3: Online Protections for Minors'
+      evidence:
+      - quote: provide additional options for termination of such accounts
+        anchor: 'CS/CS/HB 3: Online Protections for Minors'
+    - subject: social media platforms
+      action: prohibit certain minors from entering into contracts to become account
+        holders
+      object: null
+      conditions:
+      - providing conditions under which social media platforms are required
+      time_windows: []
+      defaults: []
+      exceptions: []
+      deadlines: []
+      anchor: 'CS/CS/HB 3: Online Protections for Minors'
+      evidence:
+      - quote: providing conditions under which social media platforms are required
+          to prohibit certain minors from entering into contracts to become account
+          holders
+        anchor: 'CS/CS/HB 3: Online Protections for Minors'
     enforcement:
       enforcer: Department of Legal Affairs
       mode: actions under the Florida Deceptive and Unfair Trade Practices Act
@@ -447,11 +472,10 @@ sources:
       publication_date: null
       effective_date: null
       version_note: null
-    definitions: []
     obligations:
     - subject: Social networking services
-      action: Verify the age of all users in the state of Utah, or else their account
-        must be deleted.
+      action: verify the age of all users in the state of Utah, or else their account
+        must've been deleted
       object: null
       conditions: []
       time_windows: []
@@ -464,7 +488,7 @@ sources:
           the state of Utah, or else their account must've been deleted.
         anchor: Provisions
     - subject: Users under 18
-      action: Have consent from a parent or guardian to open an account
+      action: must have consent from a parent or guardian to open an account
       object: null
       conditions: []
       time_windows: []
@@ -473,11 +497,12 @@ sources:
       deadlines: []
       anchor: Provisions
       evidence:
-      - quote: Users who are under 18 must have consent from a parent or guardian
-          to open an account
+      - quote: Users who are under 18 must have consent from a [parent](https://en.wikipedia.org/wiki/Parent
+          "Parent") or [guardian](https://en.wikipedia.org/wiki/Legal_guardian "Legal
+          guardian") to open an account
         anchor: Provisions
     - subject: Parent
-      action: Able to have access to the account and its data for monitoring.
+      action: must be able to have access to the account and its data for monitoring
       object: null
       conditions: []
       time_windows: []
@@ -491,7 +516,7 @@ sources:
         anchor: Provisions
     prohibitions:
     - subject: Social networks
-      forbidden: Collect data based on the activity of minors
+      forbidden: collecting data based on the activity of minors
       conditions:
       - Unless required to comply with state or federal law
       exceptions: []
@@ -502,21 +527,22 @@ sources:
           were prohibited from collecting data based on the activity of minors
         anchor: Provisions
     - subject: Social networks
-      forbidden: Display targeted advertising or algorithmic recommendations of content,
-        users, or groups to minors.
+      forbidden: displaying "targeted advertising or algorithmic recommendations of
+        content, users, or groups to minors"
       conditions: []
       exceptions: []
       time_windows: []
       anchor: Provisions
       evidence:
-      - quote: may've not displayed targeted advertising or algorithmic recommendations
-          of content, users, or groups to minors.
+      - quote: may've not displayed [targeted advertising](https://en.wikipedia.org/wiki/Targeted_advertising
+          "Targeted advertising") or algorithmic recommendations of content, users,
+          or groups to minors.
         anchor: Provisions
     - subject: Minors
-      forbidden: Access the service
+      forbidden: access to the service between the hours of 10:30 p.m., and 6:30 a.m.
+        without parental consent
       conditions: []
-      exceptions:
-      - parental consent
+      exceptions: []
       time_windows:
       - start_local: '22:30'
         end_local: 06:30
@@ -527,20 +553,9 @@ sources:
       - quote: A social network must not allow minors to access the service between
           the hours of 10:30 p.m., and 6:30 a.m. without parental consent.
         anchor: Provisions
-    - subject: Social networks
-      forbidden: Expose features to minors that cause them to have an "addiction"
-        to the platform
-      conditions: []
-      exceptions: []
-      time_windows: []
-      anchor: Provisions
-      evidence:
-      - quote: H.B. 311 prohibits social networks from exposing features to minors
-          that cause them to have an 'addiction' to the platform
-        anchor: Provisions
     disclosures_reporting:
-    - subject: Social networks
-      requirement: Perform quarterly audits
+    - subject: Social networking service
+      requirement: perform quarterly audits
       frequency: quarterly
       metrics: []
       anchor: Provisions
@@ -553,6 +568,8 @@ sources:
       exclusivity: null
       rulemaking:
         required: false
+        by_date: null
+        topics: []
       anchor: Provisions
       evidence:
       - quote: The bills prescribed fines of $2,500 per-violation for violations of
@@ -572,17 +589,24 @@ sources:
       publication_date: null
       effective_date: null
       version_note: null
+    definitions: []
     obligations:
     - subject: provider
-      action: report to the CyberTipline of NCMEC
+      action: report to CyberTipline
       object: null
       conditions:
       - obtaining actual knowledge of any facts or circumstances described in paragraph
         (2)(A)
-      time_windows: []
+      time_windows:
+      - start_local: null
+        end_local: null
+        weekdays: null
+        months: null
       defaults: []
       exceptions: []
-      deadlines: []
+      deadlines:
+      - relative_to: obtaining actual knowledge
+        date: null
       anchor: § 2258A
       evidence:
       - quote: shall, as soon as reasonably possible after obtaining actual knowledge
@@ -590,21 +614,43 @@ sources:
           described in subparagraph (B)
         anchor: § 2258A
     - subject: provider
-      action: make available each report to one or more law enforcement agencies
+      action: preserve contents of report
       object: null
       conditions: []
       time_windows: []
       defaults: []
       exceptions: []
-      deadlines: []
+      deadlines:
+      - relative_to: submission to the CyberTipline
+        date: null
       anchor: § 2258A
       evidence:
-      - quote: NCMEC shall make available each report made under subsection (a)(1)
-          to one or more of the following law enforcement agencies
+      - quote: a completed submission by a provider of a report to the CyberTipline
+          under subsection (a)(1) shall be treated as a request to preserve the contents
+          provided in the report for 1 year after the submission to the CyberTipline.
+        anchor: § 2258A
+    prohibitions:
+    - subject: law enforcement agency
+      forbidden: disclose information contained in report
+      conditions:
+      - receiving a report under subsection (c)
+      exceptions:
+      - to an attorney for the government for use in the performance of the official
+        duties of that attorney
+      - to such officers and employees of that law enforcement agency, as may be necessary
+        in the performance of their investigative and recordkeeping functions
+      - to such other government personnel (including personnel of a State or subdivision
+        of a State) as are determined to be necessary by an attorney for the government
+      time_windows: []
+      anchor: § 2258A
+      evidence:
+      - quote: Except as provided in paragraph (2), a law enforcement agency that
+          receives a report under subsection (c) shall not disclose any information
+          contained in that report.
         anchor: § 2258A
     disclosures_reporting:
     - subject: provider
-      requirement: report facts/circumstances of apparent/imminent violations to CyberTipline
+      requirement: report to CyberTipline
       frequency: null
       metrics: []
       anchor: § 2258A

@@ -1,4 +1,6 @@
 .env
-__pychache__/
 .vscode/*
 .ruff_cache
+__pycache__/
+*.py[cod]
+*.pyos

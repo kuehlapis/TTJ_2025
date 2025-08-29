@@ -1,9 +1,5 @@
 from backend.agents.base_agent import BaseAgent
-from backend.service.ocr_service import OCRService
-
 import re
-
-ocr = OCRService()
 
 
 class LegalAgent(BaseAgent):
@@ -16,12 +12,6 @@ class LegalAgent(BaseAgent):
         try:
             yaml_str = self.run(system_prompt, markdown_output)
             yaml_str = self.clean_yaml(yaml_str)
-            # Write YAML string directly to file
-            # with open(
-            #     "backend/agents/rules/rulebook.yaml", "w", encoding="utf-8"
-            # ) as f:
-            #     f.write(yaml_str)
-            # print("Successfully obtained YAML")
             return yaml_str
 
         except Exception as e:
