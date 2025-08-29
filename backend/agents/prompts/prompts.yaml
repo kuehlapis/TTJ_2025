@@ -195,7 +195,45 @@ prompts:
 
   Output YAML only.
   """
+ qa_user_template: |
+    # Legal Analysis Request for Feature/Product
+
+    **REFERENCE_DATE:** {{YYYY-MM-DD or "today"}}
+    **JURISDICTION_HINT (optional):** {{e.g., "US-CA", "EU", "ID"}}
+
+    **FEATURE_ANALYSIS:**
+    Feature: {{RAW_USER_INPUT}}
+
+    **KB_YAML (optional; high trust):**
+    ```yaml
+    {{KB_YAML_SNIPPETS}}
+    ```
+
+    **SOURCES (optional; medium trust):**
+    # Label each authoritative excerpt S1, S2, ... include title/date/anchor(s)
+
+    **OUTPUT FORMAT (JSON):**
+    ```json
+    {
+      "feature": "string", // Name of the feature/product
+      "description": "string", // Brief description of functionality
+      "analysis": "string", // Legal compliance analysis
+      "risk": "enum[LOW, MEDIUM, HIGH]", // Risk assessment
+      "regulations": [ // Relevant regulations
+        "string"
+      ],
+      "recommendation": "string" // Compliance recommendations
+    }
+    ```
+
+    **ANALYSIS GUIDELINES:**
+    1. Focus on regulatory impact and compliance requirements
+    2. Consider jurisdictional variations
+    3. Highlight specific risk areas
+    4. Provide actionable recommendations
+    5. Cite relevant regulations from KB_YAML or SOURCES
+
+    **NOTE:** Analysis should be comprehensive but concise, focusing on material compliance impacts.
 
 
-  
-  
+
