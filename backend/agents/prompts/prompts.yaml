@@ -15,7 +15,7 @@ prompts:
 
   Target schema (strict keys):
 
-  version: "1.0"
+  
   source:
     title: string
     jurisdiction: string | null
@@ -30,7 +30,7 @@ prompts:
       text: string
       anchor: string
       evidence:
-        - quote: string
+        - quote: | string
           anchor: string
 
   obligations:
@@ -54,7 +54,7 @@ prompts:
           date: YYYY-MM-DD | null
       anchor: string
       evidence:
-        - quote: string
+        - quote: | string
           anchor: string
       uncertainty_note: string | null
 
@@ -82,7 +82,7 @@ prompts:
       metrics: [string] | null
       anchor: string
       evidence:
-        - quote: string
+        - quote: | string
           anchor: string
 
   enforcement:
@@ -95,7 +95,7 @@ prompts:
       topics: [string] | null
     anchor: string | null
     evidence:
-      - quote: string
+      - quote: | string
         anchor: string
 
   severability: boolean | null

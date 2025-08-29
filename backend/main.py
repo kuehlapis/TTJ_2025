@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 RuleBook = RulebookRepository()
 LegalAgentMain = LegalAgent()
-CrawlerServiceMain = CrawlerService()
+CrawlerMain = CrawlerService()
 
 app = FastAPI()
 

@@ -21,4 +21,6 @@ class LegalAgent(BaseAgent):
         # Remove ```yaml or ``` markers and any leading/trailing whitespace/newlines
         yaml_str = re.sub(r"^```yaml\s*", "", yaml_str.strip(), flags=re.IGNORECASE)
         yaml_str = re.sub(r"```$", "", yaml_str.strip())
+        yaml_str = yaml_str.replace(r"\(", r"\\(").replace(r"\)", r"\\)")
+        yaml_str = yaml_str.encode("utf-8", "ignore").decode("utf-8")
         return yaml_str.strip()
