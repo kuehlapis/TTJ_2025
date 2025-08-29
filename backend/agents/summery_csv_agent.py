@@ -1,6 +1,7 @@
 import json
 import os
 import csv
+import yaml
 from backend.agents.base_agent import BaseAgent
 
 
@@ -31,8 +32,6 @@ class SummeryCsvAgent(BaseAgent):
             return None
 
         # Load prompt from prompts.yaml
-        import yaml
-
         prompt_path = os.path.join(os.path.dirname(__file__), "prompts", "prompts.yaml")
         with open(prompt_path, "r", encoding="utf-8") as pf:
             prompts_yaml = yaml.safe_load(pf)
