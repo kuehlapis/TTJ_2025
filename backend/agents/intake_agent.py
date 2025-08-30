@@ -30,20 +30,7 @@ class IntakeAgent(BaseAgent):
         cleaned_text = input.strip()
         return cleaned_text
 
-    def normalization(
-        self, feature_name: str, feature_desc: str, feature_doc: Optional[str] = None
-    ) -> str:
-        feature_name = self.clean_text(feature_name)
-        feature_desc = self.clean_text(feature_desc)
-
-        if feature_doc:
-            feature_doc = self.clean_text(feature_doc)
-            input_text = ".".join(
-                filter(None, [feature_name, feature_desc, feature_doc])
-            )
-        else:
-            input_text = ".".join(filter(None, [feature_name, feature_desc]))
-
+    def normalization(self, input_text: str) -> str:
         for term in self.sorted_terms:
             pattern = re.compile(r"\b" + re.escape(term) + r"\b", re.IGNORECASE)
             replacement = f"{term} ({self.terminology[term]})"
@@ -64,7 +51,7 @@ class IntakeAgent(BaseAgent):
             if response.states:
                 response.states = f"{response.country}-{response.states}"
 
-            return response
+            return response.model_dump()
         except Exception as e:
             print(f"Error getting response from intake agent: {e}")
             return None

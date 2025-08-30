@@ -2,7 +2,6 @@ from backend.agents.base_agent import BaseAgent
 import yaml
 from datetime import datetime
 import os
-import json
 from typing import List, Dict, Any
 
 
@@ -33,7 +32,7 @@ class AnalyzerAgent(BaseAgent):
         result = []
         result.append(jurisdiction["country"])
         result.append(jurisdiction["continent"])
-        result.append(jurisdiction["state"])
+        result.append(jurisdiction["states"])
         return result
 
     def extract_legal(self, region: List[str]) -> Dict[str, Any]:
@@ -48,35 +47,35 @@ class AnalyzerAgent(BaseAgent):
 
     def _wrap_question(self, question: str, jurisdiction: str = None) -> str:
         """Simply combine the question with jurisdiction if provided"""
+        region_lists = self.extract_region(jurisdiction)
+        legal_json = self.extract_legal(region_lists)
+        print(legal_json)
+
         if jurisdiction:
-            return f"For jurisdiction {jurisdiction}: {question}"
+            return f"Referencing the legal compliance: {legal_json}\n for jurisdiction {jurisdiction} check for violation: {question}."
+
         return question
 
-    async def analyze_question(self, user_input: str, jurisdiction: dict) -> Dict[str, Any]:
+    async def analyze_question(
+        self, user_input: str, jurisdiction: dict
+    ) -> Dict[str, Any]:
         """Process user's input using the system prompt"""
         try:
             system_prompt = self.get_system_prompt("analyzer_agent")
-            print(system_prompt)
-            
+
             formatted_question = self._wrap_question(user_input, jurisdiction)
-            print(formatted_question)
-
-            # No template wrapping, just use system prompt and formatted question directly
             response = self.run(system_prompt, formatted_question)
+            return response
+            # print("\nDebug - Raw Response:")
 
-            # Debug the raw response
-            print("\nDebug - Raw Response:")
-            print(response)
+            # structured = self._structure_response(response)
 
-            # Structure the response immediately
-            structured = self._structure_response(response)
-
-            return {
-                "status": "success",
-                "question": user_input,
-                "analysis": structured,
-                "timestamp": datetime.now().isoformat(),
-            }
+            # return {
+            #     "status": "success",
+            #     "question": user_input,
+            #     "analysis": structured,
+            #     "timestamp": datetime.now().isoformat(),
+            # }
         except Exception as e:
             print(f"Error in analyze_question: {str(e)}")
             return {
@@ -100,14 +99,14 @@ class AnalyzerAgent(BaseAgent):
                     "legal_requirements": [],
                     "feature_analysis": [],
                     "jurisdictional_notes": "",
-                    "compliance_tasks": []
-                }
+                    "compliance_tasks": [],
+                },
             }
 
             # Parse sections from the response
             sections = response.split("\n\n")
-            current_section = None
-            
+            # current_section = None
+
             for section in sections:
                 if "Legal Requirements & Obligations" in section:
                     # Extract regulations
@@ -115,14 +114,14 @@ class AnalyzerAgent(BaseAgent):
                         if "**" in line and ":" in line:
                             reg = line.split(":", 1)[0].strip("* ")
                             analysis_dict["regulations"].append(reg)
-                            
+
                 elif "Feature Analysis" in section:
                     # Extract feature details and risks
                     analysis_dict["analysis"] = section.strip()
                     # Determine risk level based on content
                     if "HIGH" in section.upper() or "CRITICAL" in section.upper():
                         analysis_dict["risk"] = "HIGH"
-                    
+
                 elif "Actionable Analysis & Recommendations" in section:
                     # Extract recommendations
                     recommendations = []
@@ -143,7 +142,7 @@ class AnalyzerAgent(BaseAgent):
             # If no structured data was found, use the raw response
             if not any(analysis_dict["regulations"]):
                 analysis_dict["analysis"] = response
-                
+
             return analysis_dict
 
         except Exception as e:
@@ -155,7 +154,7 @@ class AnalyzerAgent(BaseAgent):
                 "risk": "HIGH",
                 "regulations": [],
                 "recommendation": "Please review input and try again",
-                "details": {}
+                "details": {},
             }
 
     async def analyze_from_file(self, input_file: str) -> Dict[str, Any]:
@@ -188,5 +187,3 @@ class AnalyzerAgent(BaseAgent):
                 "regulations": [],
                 "recommendation": "Check input file and try again",
             }
-
-
