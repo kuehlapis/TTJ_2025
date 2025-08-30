@@ -4,8 +4,11 @@ from backend.service.crawler_service import CrawlerService
 from backend.agents.analyzer_agent import AnalyzerAgent
 from backend.agents.intake_agent import IntakeAgent
 from backend.service.excel_service import ExcelService
-from fastapi import FastAPI
+from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from backend.main import AnalyzerAgentMain, IntakeAgentMain, ExcelMain
+import json
+import asyncio
 
 
 RuleBook = RulebookRepository()
@@ -26,7 +29,29 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/analyze")
+async def analyze(text: str = Query(..., description="Text to analyze")):
+    try:
+        # Process the input text
+        cleaned_text = IntakeAgentMain.normalization(text)
+        region = IntakeAgentMain.extract_region(cleaned_text)
 
-@app.get("/")
-async def read_root():
-    return {"message": "hi gays"}
+        # Analyze the text
+        result = await AnalyzerAgentMain.analyze_question(cleaned_text, region)
+        
+        # Save and return results
+        with open("backend/agents/outputs/analyzer_output.json", "w", encoding="utf-8") as f:
+            output = result.model_dump()
+            json.dump(output, f, indent=2, ensure_ascii=False)
+            print(f"Analysis saved to analyzer_output.json")
+            
+        return {
+            "status": "success",
+            "data": output,
+            "message": "Analysis completed successfully"
+        }
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
