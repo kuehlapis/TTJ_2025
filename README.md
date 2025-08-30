@@ -7,10 +7,10 @@ For full project documentation, see: [Project Docs](https://docs.google.com/docu
 
 # Repository Setup
 ## Clone the repository:
-	```bash
-	git clone <repo-url>
-	cd TTJ_2025/frontend
-	```
+```bash
+git clone <repo-url>
+cd TTJ_2025/frontend
+```
 
 # Set up Instructions for Backend with UV
 This guide explains how to set up and run the backend of the project using **UV** with **FastAPI**. 
@@ -21,21 +21,21 @@ This guide explains how to set up and run the backend of the project using **UV*
 - uv package manager
 
 ## 1. Install UV if not installed
-	```bash
-	pip install uv
-	```
+```bash
+pip install uv
+```
 
 ## 2. Install Dependencies:
-	```bash
-	cd backend
+```bash
+cd backend
 
-	uv sync
-	```
+uv sync
+```
 
 ## 3. Run backend
-	```bash
-	uv run fastapi dev main.py
-	```
+```bash
+uv run fastapi dev main.py
+```
 ## After starting the development server, you can access the backend at:
   ➜ localhost: http://127.0.0.1:8000/docs
 
@@ -44,14 +44,14 @@ This guide explains how to set up and run the frontend of the project.
 ---
 
 ## 1. Install dependencies:
-	```bash
-	cd frontend
-	npm i
-	```
+```bash
+cd frontend
+npm i
+```
 ## 2. Run the frontend:
-	```bash
-	npm run dev
-	```
+```bash
+npm run dev
+```
 
 ## After starting the development server, you can access the frontend at:
   ➜  Local:   http://localhost:8080/
