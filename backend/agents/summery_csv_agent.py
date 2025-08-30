@@ -60,16 +60,14 @@ class SummeryCsvAgent(BaseAgent):
 
         try:
             if isinstance(response, str):
-                # Remove code block markers if present
-                response_clean = re.sub(
-                    r"^```json\s*|```$", "", response.strip(), flags=re.MULTILINE
-                )
-                response_clean = re.sub(
-                    r"^```json\s*|^```|```$",
-                    "",
-                    response_clean.strip(),
-                    flags=re.MULTILINE,
-                )
+                # Extract JSON array from response, even if extra text is present
+                match = re.search(r"```json\s*(\[[\s\S]*?\])\s*```", response)
+                if match:
+                    response_clean = match.group(1)
+                else:
+                    # Fallback: try to find the first JSON array in the string
+                    match = re.search(r"(\[[\s\S]*?\])", response)
+                    response_clean = match.group(1) if match else response
                 summary_list = json.loads(response_clean)
             else:
                 summary_list = response
@@ -81,11 +79,18 @@ class SummeryCsvAgent(BaseAgent):
         try:
             if isinstance(summary_list, dict):
                 summary_list = [summary_list]
-            # Collect all keys from all rows
+            # Load original analyser_data for context
+            with open(self.input_file, "r", encoding="utf-8") as f:
+                original_data = json.load(f)
+            # If original_data is a dict, convert to list
+            if isinstance(original_data, dict):
+                original_data = [original_data]
+            # Collect all keys from Gemini and original JSON
             all_keys = set()
             for row in summary_list:
                 all_keys.update(row.keys())
-            # Ensure required columns are present and first
+            for row in original_data:
+                all_keys.update(row.keys())
             required_fields = [
                 "geolocation",
                 "severity",
@@ -102,10 +107,17 @@ class SummeryCsvAgent(BaseAgent):
             with open(self.output_file, "w", newline="", encoding="utf-8") as csvfile:
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
-                for row in summary_list:
+                for i, row in enumerate(summary_list):
+                    # Always include geolocation and other context from original JSON
+                    context_row = original_data[i] if i < len(original_data) else {}
+                    # Always set geolocation from context_row if present
+                    if "geolocation" in context_row:
+                        row["geolocation"] = context_row["geolocation"]
+                    for key in required_fields:
+                        if key not in row and key in context_row:
+                            row[key] = context_row[key]
                     # Add Gemini's geo-specific compliance flag if not present
                     if "geo_compliance_flag" not in row:
-                        # Example: infer from geolocation or add logic to get from Gemini
                         row["geo_compliance_flag"] = (
                             "REQUIRED" if row.get("geolocation") else "NOT REQUIRED"
                         )
