@@ -7,6 +7,7 @@ class IntakeOutput(BaseModel):
     continent: Optional[str]
     states: Optional[str]
 
+
 class AnalzyerOutput(BaseModel):
     geolocation: str
     law: str
@@ -16,4 +17,3 @@ class AnalzyerOutput(BaseModel):
     evidence: str
     recommendations: str
     legal_references: str
-

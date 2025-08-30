@@ -65,7 +65,9 @@ class AnalyzerAgent(BaseAgent):
             system_prompt = self.get_system_prompt("analyzer_agent")
 
             formatted_question = self._wrap_question(user_input, jurisdiction)
-            response: AnalzyerOutput =  self.run(system_prompt, formatted_question, AnalzyerOutput)
+            response: AnalzyerOutput = self.run(
+                system_prompt, formatted_question, AnalzyerOutput
+            )
             return response
             # print("\nDebug - Raw Response:")
 
