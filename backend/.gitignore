@@ -1,6 +1,9 @@
 .env
+<<<<<<< HEAD
 .vscode/*
 .ruff_cache
 __pycache__/
 *.py[cod]
 *.pyos
+=======
+>>>>>>> origin/main
