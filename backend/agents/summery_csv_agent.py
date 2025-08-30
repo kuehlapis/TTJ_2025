@@ -2,6 +2,7 @@ import json
 import os
 import csv
 import yaml
+import re
 
 try:
     from base_agent import BaseAgent
@@ -56,7 +57,6 @@ class SummeryCsvAgent(BaseAgent):
             return None
 
         # Expecting response to be a list of dicts
-        import re
 
         try:
             if isinstance(response, str):
@@ -83,13 +83,16 @@ class SummeryCsvAgent(BaseAgent):
                 fieldnames = ["feature", "geo_flag", "reasoning", "regulations"]
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
+                # If summary_list is a dict, convert to list
+                if isinstance(summary_list, dict):
+                    summary_list = [summary_list]
                 for row in summary_list:
                     writer.writerow(
                         {
-                            "feature": row.get("feature", ""),
-                            "geo_flag": row.get("geo_flag", ""),
+                            "feature": row.get("law", ""),
+                            "geo_flag": row.get("geolocation", ""),
                             "reasoning": row.get("reasoning", ""),
-                            "regulations": row.get("regulations", ""),
+                            "regulations": row.get("legal_references", ""),
                         }
                     )
             print(f"Summary CSV saved to {self.output_file}")
