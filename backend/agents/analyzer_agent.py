@@ -2,6 +2,7 @@ from backend.agents.base_agent import BaseAgent
 import yaml
 from datetime import datetime
 import os
+from backend.schema.schemas import AnalzyerOutput
 from typing import List, Dict, Any
 
 
@@ -64,7 +65,7 @@ class AnalyzerAgent(BaseAgent):
             system_prompt = self.get_system_prompt("analyzer_agent")
 
             formatted_question = self._wrap_question(user_input, jurisdiction)
-            response = self.run(system_prompt, formatted_question)
+            response: AnalzyerOutput =  self.run(system_prompt, formatted_question, AnalzyerOutput)
             return response
             # print("\nDebug - Raw Response:")
 

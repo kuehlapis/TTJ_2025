@@ -1,0 +1,9 @@
+{
+  "geolocation": "US-CA",
+  "law": "SB-976 Protecting Our Kids from Social Media Addiction Act",
+  "severity": "Low",
+  "reasoning": "The app disables Personalized Feed (PF) by default for users under 18 in California, aligning with the requirement to provide a non-recommended feed (NR) by default, unless parental consent is given. This complies with Section 27002.",
+  "potential_violations": "No potential violations, as the feature adheres to the law by defaulting to a non-recommended feed for minors.",
+  "recommendations": "Continue monitoring Feature Rollout status (FR) and ensure Geo-handler (GH) accurately detects user location. Maintain records of parental consent for audit purposes.",
+  "legal_references": "SB-976, Section 27002"
+}

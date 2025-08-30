@@ -13,21 +13,12 @@ async def main():
     # IntakeAgentMain.save_output(cleaned_text, region)
     print("\nAnalyzing...")
     result = await AnalyzerAgentMain.analyze_question(cleaned_text, region)
+    print(result.model_dump())
 
-    with open(
-        "backend/agents/outputs/analyzer_output.txt", "w", encoding="utf-8"
-        ) as f:
-            f.write("Response:\n")
-            f.write(result)
-
-    # result = AnalyzerAgentMain.analyze_question(question, jurisdiction)
-
-    # if result["status"] == "success":
-    #     print("\nAnalysis Result:")
-    #     print("--------------")
-    #     print(result["analysis"])
-    # else:
-    #     print(f"\nError: {result['error']}")
+    # Write result to JSON file
+    with open("backend/agents/outputs/analyzer_output.json", "w", encoding="utf-8") as f:
+        json.dump(result.model_dump(), f, indent=2, ensure_ascii=False)
+        print(f"Analysis saved to analyzer_output.json")
 
 if __name__ == '__main__':
     asyncio.run(main())
