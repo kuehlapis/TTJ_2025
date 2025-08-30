@@ -4,9 +4,12 @@ from backend.service.crawler_service import CrawlerService
 from backend.agents.analyzer_agent import AnalyzerAgent
 from backend.agents.intake_agent import IntakeAgent
 from backend.service.excel_service import ExcelService
+from backend.agents.summery_csv_agent import SummeryCsvAgent
 from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 import json
+import os
 
 # Initialize services and agents
 RuleBook = RulebookRepository()
@@ -15,6 +18,8 @@ ExcelMain = ExcelService()
 LegalAgentMain = LegalAgent()
 AnalyzerAgentMain = AnalyzerAgent()
 IntakeAgentMain = IntakeAgent()
+SummeryCsvAgentMain = SummeryCsvAgent()
+
 
 app = FastAPI()
 
@@ -38,9 +43,7 @@ async def analyze(text: str = Query(..., description="Text to analyze")):
         result = await AnalyzerAgentMain.analyze_question(cleaned_text, region)
 
         # Save and return results
-        with open(
-            "backend/agents/outputs/analyzer_output.json", "w", encoding="utf-8"
-        ) as f:
+        with open("agents/outputs/analyzer_output.json", "w", encoding="utf-8") as f:
             output = result.model_dump()
             json.dump(output, f, indent=2, ensure_ascii=False)
             print("Analysis saved to analyzer_output.json")
@@ -53,3 +56,21 @@ async def analyze(text: str = Query(..., description="Text to analyze")):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/result")
+async def fetch_output():
+    """ " """
+    result = SummeryCsvAgentMain.generate_summary_csv()
+    return result
+
+
+@app.get("/summary")
+def fetch_csv():
+    """To download csv from frontend"""
+    file_path = "agents/outputs/summery.csv"
+
+    if not os.path.exists(file_path):
+        return {"error": "CSV file not found."}
+
+    return FileResponse(path=file_path, filename="summery.csv", media_type="text/csv")

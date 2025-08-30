@@ -2,11 +2,9 @@
   "geolocation": "US-CA",
   "law": "SB-976 Protecting Our Kids from Social Media Addiction Act",
   "severity": "High",
-  "confidence": "High",
-  "reasoning": "The feature implements a default setting of 'Not Recommended' (NR) for Personalized Feeds (PF) for users under 18 in California, aligning with the requirements of SB-976. This setting is only overridden with explicit parental consent. The implementation includes geo-detection (GH) to identify users in California and uses feature rollout monitoring (FR).",
-  "potential_violations": "No potential violations are identified as the feature is designed to comply with SB-976 by disabling personalized feeds by default for minors in California without parental consent.",
-  "evidence": "Feature description states: 'As part of compliance with California’s SB976, the app will disable PF (Personalized feed) by default for users under 18 located in California.'",
-  "recommendations": "Continue monitoring feature rollout and ensure geo-detection accuracy to maintain compliance. Keep records of parental consent for audit purposes.",
-  "legal_references": "SB-976, specifically sections addressing addictive feeds and parental consent requirements.",
-  "citations": "SB-976 Section 27001, 27002"
+  "reasoning": "Launching a personalized feed (PF) variant in California without considering the age of users could violate SB-976, which prohibits providing an addictive feed to minors without verifiable parental consent. The law defines 'addictive feed' as media recommended based on user information.",
+  "potential_violations": "Providing an addictive feed to minor users without verifiable parental consent, failing to implement mechanisms for parental control as required by the law.",
+  "evidence": "SB-976, Sections 27001 and 27002",
+  "recommendations": "Implement age verification mechanisms to identify minor users in California. Obtain verifiable parental consent before providing addictive feeds to minor users. Implement all parental control mechanisms as specified in Section 27002 of SB-976. Ensure Spanner and Glow flags are correctly configured to monitor and alert on potential violations.",
+  "legal_references": "SB-976, Sections 27001, 27002, 27000.5 (definitions of 'Addictive feed' and 'Minor')"
 }

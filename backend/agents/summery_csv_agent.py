@@ -3,18 +3,14 @@ import os
 import csv
 import yaml
 import re
-
-try:
-    from base_agent import BaseAgent
-except ModuleNotFoundError:
-    from base_agent import BaseAgent
+from backend.agents.base_agent import BaseAgent
 
 
 class SummeryCsvAgent(BaseAgent):
     def __init__(self):
         super().__init__()
         self.input_file = os.path.join(
-            os.path.dirname(__file__), "..", "json_dump", "analyzer_output.json"
+            os.path.dirname(__file__), "outputs", "analyzer_output.json"
         )
         self.output_file = os.path.join(
             os.path.dirname(__file__), "outputs", "summery.csv"
@@ -51,7 +47,7 @@ class SummeryCsvAgent(BaseAgent):
             or "You are a legal compliance summarizer."
         )
         response = self.run(system_prompt, input_text)
-        print("Gemini response:", response)
+        # print("Gemini response:", response)
         if not response:
             print("No response from Gemini agent.")
             return None
@@ -71,10 +67,13 @@ class SummeryCsvAgent(BaseAgent):
                 summary_list = json.loads(response_clean)
             else:
                 summary_list = response
+
+            return summary_list
         except Exception as e:
             print(f"Error parsing Gemini response: {e}")
             return None
 
+    def get_csv(self, summary_list: dict) -> str:
         # Write to CSV
         try:
             if isinstance(summary_list, dict):
@@ -122,6 +121,7 @@ class SummeryCsvAgent(BaseAgent):
                             "REQUIRED" if row.get("geolocation") else "NOT REQUIRED"
                         )
                     writer.writerow(row)
+
             print(f"Summary CSV saved to {self.output_file}")
             return self.output_file
         except Exception as e:
@@ -131,5 +131,7 @@ class SummeryCsvAgent(BaseAgent):
 
 if __name__ == "__main__":
     agent = SummeryCsvAgent()
-    result = agent.generate_summary_csv()
+    response = agent.generate_summary_csv()
+    print(response)
+    result = agent.get_csv(response)
     print("CSV output file:", result)

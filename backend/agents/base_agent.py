@@ -30,7 +30,7 @@ class BaseAgent:
 
     def get_system_prompt(self, agent_type: str) -> str:
         try:
-            with open("backend/agents/prompts/prompts.yaml", "r") as f:
+            with open("agents/prompts/prompts.yaml", "r") as f:
                 data = yaml.safe_load(f)
                 system_prompt = data["prompts"].get(agent_type, data["prompts"]["base"])
             return system_prompt

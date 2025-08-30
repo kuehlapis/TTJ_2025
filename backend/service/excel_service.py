@@ -7,7 +7,7 @@ class ExcelService:
 
     def open_csv(self):
         try:
-            return pd.read_excel("backend/dataset/dataset.xlsx")
+            return pd.read_excel("dataset/dataset.xlsx")
         except Exception as e:
             print(f"Error fetching dataset:{e}")
 
