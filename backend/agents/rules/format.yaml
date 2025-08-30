@@ -1,0 +1,37 @@
+qa_user_template: |
+  # Legal Compliance Analysis Request
+
+  **REFERENCE_DATE:** {{YYYY-MM-DD}}
+  **JURISDICTION:** {{JURISDICTION_HINT}}
+
+  **FEATURE FOR ANALYSIS:**
+  {{RAW_USER_INPUT}}
+
+  **LEGAL KNOWLEDGE BASE:**
+  ```yaml
+  {{KB_YAML_SNIPPETS}}
+  ```
+
+  **ANALYSIS REQUIREMENTS:**
+  1. Review feature against relevant regulations in KB
+  2. Consider jurisdiction-specific requirements
+  3. Identify specific obligations and prohibitions
+  4. Assess compliance risks
+  5. Provide actionable recommendations
+
+  **REQUIRED OUTPUT FORMAT:**
+  ```json
+  {
+    "feature": "{{RAW_USER_INPUT}}",
+    "description": "Brief feature description",
+    "analysis": "Detailed compliance analysis referencing specific regulations",
+    "risk": "LOW|MEDIUM|HIGH",
+    "regulations": [
+      "List relevant regulations from KB with section references"
+    ],
+    "recommendation": "Specific, actionable compliance steps"
+  }
+  ```
+
+  Base your analysis ONLY on the provided legal knowledge base.
+  Cite specific sections and requirements from the KB.
