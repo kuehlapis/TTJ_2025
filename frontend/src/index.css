@@ -2,131 +2,97 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Geo-Compliance Tool Design System - Professional compliance interface */
+/* Professional geo-compliance design system with blue-gray theme and semantic compliance colors */
 
 @layer base {
   :root {
-    /* Base colors - clean professional palette */
-    --background: 0 0% 100%;
-    --foreground: 215 16% 20%;
+    /* Base theme - Professional blue-gray */
+    --background: 210 20% 98%;
+    --foreground: 215 25% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 215 16% 20%;
+    --card-foreground: 215 25% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 16% 20%;
+    --popover-foreground: 215 25% 15%;
 
-    /* Professional blue primary */
-    --primary: 217 91% 60%;
+    /* Primary - Professional blue */
+    --primary: 214 84% 56%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 217 91% 55%;
+    --primary-hover: 214 84% 50%;
 
-    /* Subtle gray secondary */
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 215 16% 35%;
+    /* Secondary - Soft blue-gray */
+    --secondary: 214 32% 91%;
+    --secondary-foreground: 215 25% 15%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 214 32% 95%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 210 40% 96%;
-    --accent-foreground: 215 16% 35%;
+    --accent: 214 32% 91%;
+    --accent-foreground: 215 25% 15%;
+
+    /* Compliance severity colors */
+    --severity-high: 0 84% 60%;
+    --severity-high-foreground: 0 0% 100%;
+    --severity-medium: 38 92% 50%;
+    --severity-medium-foreground: 0 0% 100%;
+    --severity-low: 142 71% 45%;
+    --severity-low-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 31% 91%;
-    --input: 214 31% 91%;
-    --ring: 217 91% 60%;
+    --border: 214 32% 86%;
+    --input: 214 32% 91%;
+    --ring: 214 84% 56%;
 
     --radius: 0.5rem;
 
-    /* Compliance status colors */
-    --compliant: 142 71% 45%;
-    --compliant-foreground: 0 0% 100%;
-    --compliant-soft: 142 76% 96%;
-    
-    --prohibited: 0 84% 60%;
-    --prohibited-foreground: 0 0% 100%;
-    --prohibited-soft: 0 86% 97%;
-    
-    --needs-controls: 38 92% 50%;
-    --needs-controls-foreground: 0 0% 100%;
-    --needs-controls-soft: 48 100% 96%;
-
-    /* Severity colors */
-    --severity-high: 0 84% 60%;
-    --severity-medium: 38 92% 50%;
-    --severity-ok: 142 71% 45%;
-
-    /* Subtle gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 91% 55%));
-    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%), hsl(210 40% 98%));
-
-    /* Professional shadows */
-    --shadow-soft: 0 1px 3px 0 hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
-    --shadow-medium: 0 4px 6px -1px hsl(0 0% 0% / 0.1), 0 2px 4px -2px hsl(0 0% 0% / 0.1);
-    --shadow-large: 0 10px 15px -3px hsl(0 0% 0% / 0.1), 0 4px 6px -4px hsl(0 0% 0% / 0.1);
-
-    /* Smooth transitions */
-    --transition-fast: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-smooth: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
-
     --sidebar-background: 0 0% 98%;
+
     --sidebar-foreground: 240 5.3% 26.1%;
+
     --sidebar-primary: 240 5.9% 10%;
+
     --sidebar-primary-foreground: 0 0% 98%;
+
     --sidebar-accent: 240 4.8% 95.9%;
+
     --sidebar-accent-foreground: 240 5.9% 10%;
+
     --sidebar-border: 220 13% 91%;
+
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
-    --background: 215 28% 17%;
+    --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
 
-    --card: 215 28% 17%;
+    --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 215 28% 17%;
+    --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 217 91% 60%;
-    --primary-foreground: 215 28% 17%;
-    --primary-hover: 217 91% 55%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 215 25% 27%;
+    --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 215 25% 27%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 215 25% 27%;
+    --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 62% 30%;
+    --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 215 25% 27%;
-    --input: 215 25% 27%;
-    --ring: 217 91% 60%;
-
-    --compliant: 142 71% 45%;
-    --compliant-foreground: 0 0% 100%;
-    --compliant-soft: 142 76% 15%;
-    
-    --prohibited: 0 62% 30%;
-    --prohibited-foreground: 0 0% 100%;
-    --prohibited-soft: 0 86% 15%;
-    
-    --needs-controls: 38 92% 35%;
-    --needs-controls-foreground: 0 0% 100%;
-    --needs-controls-soft: 48 100% 15%;
-
-    --severity-high: 0 62% 30%;
-    --severity-medium: 38 92% 35%;
-    --severity-ok: 142 71% 45%;
-
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -145,40 +111,5 @@
 
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
-  }
-}
-
-@layer components {
-  .compliance-badge {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium transition-colors;
-  }
-  
-  .compliance-badge.compliant {
-    @apply bg-compliant-soft text-compliant;
-  }
-  
-  .compliance-badge.prohibited {
-    @apply bg-prohibited-soft text-prohibited;
-  }
-  
-  .compliance-badge.needs-controls {
-    @apply bg-needs-controls-soft text-needs-controls;
-  }
-  
-  .severity-indicator {
-    @apply inline-flex items-center px-2 py-1 rounded text-xs font-medium;
-  }
-  
-  .severity-indicator.high {
-    @apply bg-severity-high/10 text-severity-high;
-  }
-  
-  .severity-indicator.medium {
-    @apply bg-severity-medium/10 text-severity-medium;
-  }
-  
-  .severity-indicator.ok {
-    @apply bg-severity-ok/10 text-severity-ok;
   }
 }

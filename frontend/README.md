@@ -2,37 +2,8 @@
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/16f341c0-be0f-4fd1-a588-a5c0f44811fc
-
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/16f341c0-be0f-4fd1-a588-a5c0f44811fc) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
 
@@ -62,7 +33,7 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/16f341c0-be0f-4fd1-a588-a5c0f44811fc) and click on Share -> Publish.
+Simply open [Lovable](https://lovable.dev/projects/69858bdd-f685-4fda-94ff-fe94317a7a97) and click on Share -> Publish.
 
 ## Can I connect a custom domain to my Lovable project?
 

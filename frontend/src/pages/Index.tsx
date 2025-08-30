@@ -1,298 +1,296 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { GeoChip } from "@/components/GeoChip";
-import { SummaryBar } from "@/components/SummaryBar";
-import { FindingsTable } from "@/components/FindingsTable";
-import { AnalysisResult, ReviewStatus } from "@/types/compliance";
-import { analyzeFeature, exportToCsv, exportToJson } from "@/utils/api";
-import { EXAMPLE_PROMPTS } from "@/data/mockData";
-import { Download, AlertCircle, RefreshCw, FileText, FileJson } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { SeverityBadge } from "@/components/SeverityBadge";
+import { LoadingSkeleton } from "@/components/LoadingSkeleton";
+import { api, AnalysisResult, ComplianceResult, ApiError } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
+import { Search, Filter, Download, RotateCcw, Shield, AlertTriangle } from "lucide-react";
 
 const Index = () => {
-  const [inputText, setInputText] = useState("");
+  const [prompt, setPrompt] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
+    const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null); // Clear previous results before new analysis
   const [error, setError] = useState<string | null>(null);
-  const [reviewStates, setReviewStates] = useState<Record<string, ReviewStatus>>({});
-  const [isExporting, setIsExporting] = useState(false);
   const { toast } = useToast();
 
-  const characterCount = inputText.length;
-  const maxCharacters = 2000;
-  const isInputValid = inputText.trim().length > 0;
-
   const handleAnalyze = async () => {
-    if (!isInputValid) return;
-
+    if (!prompt.trim()) return;
+    
     setIsAnalyzing(true);
     setError(null);
-    
+    setAnalysisResult(null); // Clear previous results before new analysis
+    // Clear summery.csv before running analysis
     try {
-      const result = await analyzeFeature({ raw_text: inputText });
+      await fetch('http://127.0.0.1:8000/clear-summary', { method: 'POST' });
+    } catch (e) {
+      // Optionally handle error, but continue with analysis
+    }
+    try {
+      // Always fetch fresh data, avoid cache
+      const result = await api.analyze(prompt);
       setAnalysisResult(result);
-      
-      // Initialize review states to "Confirm" for all findings
-      const initialReviewStates: Record<string, ReviewStatus> = {};
-      result.findings.forEach(finding => {
-        initialReviewStates[finding.id] = "Confirm";
-      });
-      setReviewStates(initialReviewStates);
-
       toast({
         title: "Analysis Complete",
-        description: `Found ${result.findings.length} compliance findings across ${result.detected_geos.length} jurisdictions.`,
+        description: "Geo-compliance analysis has been completed successfully."
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Analysis failed. Please try again.");
+      const errorMessage = err instanceof ApiError ? err.message : "An unexpected error occurred";
+      setError(errorMessage);
       toast({
-        title: "Analysis Failed",
-        description: "There was an error analyzing your feature. Please try again.",
         variant: "destructive",
+        title: "Analysis Failed",
+        description: errorMessage
       });
     } finally {
       setIsAnalyzing(false);
     }
   };
 
-  const handleRetry = () => {
-    handleAnalyze();
+  const handleReset = () => {
+      setPrompt("");
+      setAnalysisResult(null);
+      setError(null);
+      // Add any additional state resets here if needed
   };
 
-  const handleReviewChange = (findingId: string, review: ReviewStatus) => {
-    setReviewStates(prev => ({
-      ...prev,
-      [findingId]: review
-    }));
-  };
-
-  const handleExport = async (format: 'csv' | 'json') => {
-    if (!analysisResult) return;
-
-    setIsExporting(true);
+  const handleDownloadJSON = async () => {
     try {
-      let content: string;
-      let filename: string;
-      let mimeType: string;
-
-      if (format === 'csv') {
-        content = await exportToCsv(analysisResult.feature_id);
-        filename = `compliance-analysis-${analysisResult.feature_id}.csv`;
-        mimeType = 'text/csv';
-      } else {
-        content = await exportToJson(analysisResult.feature_id);
-        filename = `compliance-analysis-${analysisResult.feature_id}.json`;
-        mimeType = 'application/json';
-      }
-
-      // Create download
-      const blob = new Blob([content], { type: mimeType });
+      const data = await api.getResult();
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = filename;
+      a.download = 'compliance-results.json';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-
+      
       toast({
-        title: "Export Complete",
-        description: `Downloaded ${filename}`,
+        title: "Download Complete",
+        description: "JSON results have been downloaded successfully."
       });
     } catch (err) {
+      const errorMessage = err instanceof ApiError ? err.message : "Download failed";
       toast({
-        title: "Export Failed",
-        description: "There was an error exporting the results.",
         variant: "destructive",
+        title: "Download Failed",
+        description: errorMessage
       });
-    } finally {
-      setIsExporting(false);
     }
   };
 
-  const handleExampleClick = (example: string) => {
-    setInputText(example);
+  const handleDownloadCSV = async () => {
+    try {
+      const blob = await api.getSummaryCSV();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'compliance-summary.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      toast({
+        title: "Download Complete",
+        description: "CSV summary has been downloaded successfully."
+      });
+    } catch (err) {
+      const errorMessage = err instanceof ApiError ? err.message : "Download failed";
+      toast({
+        variant: "destructive",
+        title: "Download Failed",
+        description: errorMessage
+      });
+    }
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/20">
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-primary-hover bg-clip-text text-transparent">
-            Geo-Compliance Auto-Screen
-          </h1>
-          <p className="text-lg text-muted-foreground">
-            Automated jurisdiction compliance analysis for digital features
-          </p>
-          <Badge variant="secondary" className="mt-2">
-            Demo Version
-          </Badge>
-        </div>
+  const isPromptValid = prompt.trim().length > 0;
 
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b bg-card/50 backdrop-blur">
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex items-center space-x-3">
+            <Shield className="h-8 w-8 text-primary" />
+            <h1 className="text-3xl font-bold text-foreground">
+              Geo-Compliance Auto-Screen
+            </h1>
+            <Badge variant="secondary" className="text-xs">Demo</Badge>
+          </div>
+        </div>
+      </header>
+
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Input Section */}
-        <Card className="mb-8 shadow-medium">
+        <Card className="mb-8">
           <CardHeader>
-            <CardTitle className="text-xl">Feature Description</CardTitle>
+            <CardTitle className="flex items-center space-x-2">
+              <AlertTriangle className="h-5 w-5 text-primary" />
+              <span>Feature Prompt Analysis</span>
+            </CardTitle>
+            <CardDescription>
+              Enter a feature description to analyze for geo-compliance issues and legal requirements.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Textarea
-                placeholder="Describe your feature in detail (e.g., 'A social media platform where users can create profiles, post content, and interact with friends through messaging and comments.')"
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
+                placeholder="Describe the feature you want to analyze for compliance issues..."
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
                 className="min-h-[120px] resize-none"
-                maxLength={maxCharacters}
+                disabled={isAnalyzing}
               />
-              <div className="flex justify-between items-center text-sm text-muted-foreground">
-                <span>{characterCount}/{maxCharacters} characters</span>
-                {characterCount > maxCharacters * 0.9 && (
-                  <span className="text-needs-controls">Approaching limit</span>
-                )}
+              <div className="text-xs text-muted-foreground text-right">
+                {prompt.length} characters
               </div>
             </div>
-
-            {!analysisResult && !isAnalyzing && (
-              <div className="space-y-3">
-                <p className="text-sm text-muted-foreground">Try these examples:</p>
-                <div className="flex flex-wrap gap-2">
-                  {EXAMPLE_PROMPTS.map((example, index) => (
-                    <Button
-                      key={index}
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleExampleClick(example)}
-                      className="text-left h-auto py-2 px-3"
-                    >
-                      <span className="line-clamp-2 text-xs">{example}</span>
-                    </Button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div className="flex gap-2">
-              <Button
-                onClick={handleAnalyze}
-                disabled={!isInputValid || isAnalyzing}
-                className="flex items-center gap-2"
-              >
-                {isAnalyzing ? (
-                  <>
-                    <LoadingSpinner size="sm" />
-                    Analyzing...
-                  </>
-                ) : (
-                  "Analyze Feature"
-                )}
-              </Button>
-
-              {analysisResult && (
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => handleExport('csv')}
-                    disabled={isExporting}
-                    className="flex items-center gap-2"
-                  >
-                    <FileText className="h-4 w-4" />
-                    Export CSV
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => handleExport('json')}
-                    disabled={isExporting}
-                    className="flex items-center gap-2"
-                  >
-                    <FileJson className="h-4 w-4" />
-                    Export JSON
-                  </Button>
-                </div>
+            
+            <Button 
+              onClick={handleAnalyze}
+              disabled={!isPromptValid || isAnalyzing}
+              className="w-full transition-all duration-200 hover:bg-primary-hover"
+              size="lg"
+            >
+              {isAnalyzing ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                  Analyzing...
+                </>
+              ) : (
+                "Analyze Compliance"
               )}
-            </div>
+            </Button>
           </CardContent>
         </Card>
 
-        {/* Error State */}
+        {/* Error Display */}
         {error && (
-          <Alert className="mb-6 border-destructive/50 bg-destructive/10">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription className="flex items-center justify-between">
-              <span>{error}</span>
-              <Button variant="outline" size="sm" onClick={handleRetry}>
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Retry
-              </Button>
-            </AlertDescription>
+          <Alert variant="destructive" className="mb-8">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
 
         {/* Loading State */}
-        {isAnalyzing && (
-          <Card className="mb-6">
-            <CardContent className="flex items-center justify-center py-12">
-              <div className="text-center space-y-4">
-                <LoadingSpinner size="lg" />
-                <div className="space-y-2">
-                  <h3 className="text-lg font-medium">Analyzing Feature</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Detecting jurisdictions and evaluating compliance requirements...
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+        {isAnalyzing && <LoadingSkeleton />}
 
         {/* Results Section */}
-        {analysisResult && (
-          <div className="space-y-6">
-            {/* Detected Jurisdictions */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Detected Jurisdictions</CardTitle>
+        {analysisResult && !isAnalyzing && (
+          <div className="space-y-6 animate-fade-in">
+            {/* Geolocation Chip */}
+            <div className="flex items-center space-x-2">
+              <span className="text-sm font-medium text-muted-foreground">Detected Location:</span>
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+                {analysisResult.data.geolocation}
+              </Badge>
+            </div>
+
+            {/* Analysis Results Card */}
+            <Card className="border-l-4 border-l-primary">
+              <CardHeader className="pb-4">
+                <div className="flex items-start justify-between">
+                  <div className="space-y-2">
+                    <CardTitle className="text-xl">{analysisResult.data.law}</CardTitle>
+                    <SeverityBadge severity={analysisResult.data.severity} />
+                  </div>
+                </div>
               </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2">
-                  {analysisResult.detected_geos.map((geo) => (
-                    <GeoChip key={geo} geo={geo} />
-                  ))}
+              <CardContent className="space-y-6">
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-foreground">Analysis Reasoning</h4>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {analysisResult.data.reasoning}
+                  </p>
+                </div>
+
+                <Separator />
+
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-foreground">Potential Violations</h4>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {analysisResult.data.potential_violations}
+                  </p>
+                </div>
+
+                <Separator />
+
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-foreground">Recommendations</h4>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {analysisResult.data.recommendations}
+                  </p>
+                </div>
+
+                <Separator />
+
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-foreground">Legal References</h4>
+                  <p className="text-sm text-muted-foreground font-mono bg-muted/50 p-3 rounded">
+                    {analysisResult.data.legal_references}
+                  </p>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Summary Bar */}
-            <SummaryBar summary={analysisResult.summary} />
-
-            {/* Findings Table */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Compliance Findings</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <FindingsTable
-                  findings={analysisResult.findings.map(finding => ({
-                    ...finding,
-                    review: reviewStates[finding.id] || "Confirm"
-                  }))}
-                  onReviewChange={handleReviewChange}
+            {/* Search and Filter (Visual Only) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input 
+                  placeholder="Search results..." 
+                  className="pl-9" 
+                  disabled
                 />
-              </CardContent>
-            </Card>
+              </div>
+              <div className="relative">
+                <Filter className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input 
+                  placeholder="Filter by severity..." 
+                  className="pl-9" 
+                  disabled
+                />
+              </div>
+            </div>
 
-            {/* Footer with latency */}
-            <div className="text-center text-sm text-muted-foreground">
-              {analysisResult.latency_ms ? (
-                <span>Analysis completed in {analysisResult.latency_ms}ms</span>
-              ) : (
-                <span>Analysis latency: N/A</span>
-              )}
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <Button 
+                onClick={handleReset}
+                variant="outline" 
+                className="flex-1"
+              >
+                <RotateCcw className="h-4 w-4 mr-2" />
+                Try Another Prompt
+              </Button>
+              
+              <div className="flex gap-2 flex-1">
+                <Button 
+                  onClick={handleDownloadJSON}
+                  variant="secondary"
+                  className="flex-1"
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Download JSON
+                </Button>
+                <Button 
+                  onClick={handleDownloadCSV}
+                  variant="secondary"
+                  className="flex-1"
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Download CSV
+                </Button>
+              </div>
             </div>
           </div>
         )}

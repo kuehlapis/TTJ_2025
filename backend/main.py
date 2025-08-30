@@ -47,6 +47,8 @@ async def analyze(text: str = Query(..., description="Text to analyze")):
             output = result.model_dump()
             json.dump(output, f, indent=2, ensure_ascii=False)
             print("Analysis saved to analyzer_output.json")
+        result = SummeryCsvAgentMain.generate_summary_csv()
+        SummeryCsvAgentMain.get_csv(result)
 
         return {
             "status": "success",
