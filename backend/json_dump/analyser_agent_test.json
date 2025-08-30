@@ -1,29 +1,9 @@
 {
-  "features": [
-    {
-      "feature": "Location-based Content Filtering",
-      "description": "Restricts or customizes content shown to users based on their geographic location.",
-      "analysis": "Due to GDPR and CCPA, content shown to users in the EU and California must comply with local privacy and data protection laws. Some countries require additional filtering for political or sensitive content.",
-      "risk": "HIGH",
-      "regulations": [
-        "GDPR (EU)",
-        "CCPA (California)",
-        "China Cybersecurity Law",
-        "India IT Rules 2021"
-      ],
-      "recommendation": "Implement geo-specific compliance logic to ensure content filtering meets all local regulations."
-    },
-    {
-      "feature": "Geo-targeted Advertising",
-      "description": "Delivers ads to users based on their location.",
-      "analysis": "Advertising to users in the EU must comply with GDPR consent requirements. In the US, state-level laws like CCPA apply. Some regions restrict certain ad categories.",
-      "risk": "MEDIUM",
-      "regulations": [
-        "GDPR (EU)",
-        "CCPA (California)",
-        "COPPA (US Children)"
-      ],
-      "recommendation": "Review ad targeting logic for compliance with local laws, especially for minors."
-    }
-  ]
+  "geolocation": "US-CA",
+  "law": "SB-976 Protecting Our Kids from Social Media Addiction Act",
+  "severity": "Low",
+  "reasoning": "The app disables Personalized Feed (PF) by default for users under 18 in California, aligning with the requirement to provide a non-recommended feed (NR) by default, unless parental consent is given. This complies with Section 27002.",
+  "potential_violations": "No potential violations, as the feature adheres to the law by defaulting to a non-recommended feed for minors.",
+  "recommendations": "Continue monitoring Feature Rollout status (FR) and ensure Geo-handler (GH) accurately detects user location. Maintain records of parental consent for audit purposes.",
+  "legal_references": "SB-976, Section 27002"
 }

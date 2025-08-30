@@ -2,6 +2,7 @@ import json
 import os
 import csv
 import yaml
+import re
 
 try:
     from base_agent import BaseAgent
@@ -56,20 +57,17 @@ class SummeryCsvAgent(BaseAgent):
             return None
 
         # Expecting response to be a list of dicts
-        import re
 
         try:
             if isinstance(response, str):
-                # Remove code block markers if present
-                response_clean = re.sub(
-                    r"^```json\s*|```$", "", response.strip(), flags=re.MULTILINE
-                )
-                response_clean = re.sub(
-                    r"^```json\s*|^```|```$",
-                    "",
-                    response_clean.strip(),
-                    flags=re.MULTILINE,
-                )
+                # Extract JSON array from response, even if extra text is present
+                match = re.search(r"```json\s*(\[[\s\S]*?\])\s*```", response)
+                if match:
+                    response_clean = match.group(1)
+                else:
+                    # Fallback: try to find the first JSON array in the string
+                    match = re.search(r"(\[[\s\S]*?\])", response)
+                    response_clean = match.group(1) if match else response
                 summary_list = json.loads(response_clean)
             else:
                 summary_list = response
@@ -79,19 +77,51 @@ class SummeryCsvAgent(BaseAgent):
 
         # Write to CSV
         try:
+            if isinstance(summary_list, dict):
+                summary_list = [summary_list]
+            # Load original analyser_data for context
+            with open(self.input_file, "r", encoding="utf-8") as f:
+                original_data = json.load(f)
+            # If original_data is a dict, convert to list
+            if isinstance(original_data, dict):
+                original_data = [original_data]
+            # Collect all keys from Gemini and original JSON
+            all_keys = set()
+            for row in summary_list:
+                all_keys.update(row.keys())
+            for row in original_data:
+                all_keys.update(row.keys())
+            required_fields = [
+                "geolocation",
+                "severity",
+                "law",
+                "reasoning",
+                "potential_violations",
+                "recommendations",
+                "legal_references",
+                "geo_compliance_flag",
+            ]
+            fieldnames = required_fields + [
+                k for k in all_keys if k not in required_fields
+            ]
             with open(self.output_file, "w", newline="", encoding="utf-8") as csvfile:
-                fieldnames = ["feature", "geo_flag", "reasoning", "regulations"]
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
-                for row in summary_list:
-                    writer.writerow(
-                        {
-                            "feature": row.get("feature", ""),
-                            "geo_flag": row.get("geo_flag", ""),
-                            "reasoning": row.get("reasoning", ""),
-                            "regulations": row.get("regulations", ""),
-                        }
-                    )
+                for i, row in enumerate(summary_list):
+                    # Always include geolocation and other context from original JSON
+                    context_row = original_data[i] if i < len(original_data) else {}
+                    # Always set geolocation from context_row if present
+                    if "geolocation" in context_row:
+                        row["geolocation"] = context_row["geolocation"]
+                    for key in required_fields:
+                        if key not in row and key in context_row:
+                            row[key] = context_row[key]
+                    # Add Gemini's geo-specific compliance flag if not present
+                    if "geo_compliance_flag" not in row:
+                        row["geo_compliance_flag"] = (
+                            "REQUIRED" if row.get("geolocation") else "NOT REQUIRED"
+                        )
+                    writer.writerow(row)
             print(f"Summary CSV saved to {self.output_file}")
             return self.output_file
         except Exception as e:
