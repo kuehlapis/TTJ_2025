@@ -1,36 +1,62 @@
-
+# LeCompliance
+Lecompliance is a prototype system that utilizes LLM capabilities to flag features that require geo-specific compliance logic.
 
 ## 📄 Documentation
 
 For full project documentation, see: [Project Docs](https://docs.google.com/document/d/1voDWtOC-vWqSAmjqzOxv-83WxojZyhrVTPsLfnfVrT8/edit?usp=sharing)
 
-# TTJ_2025
+# Repository Setup
+## Clone the repository:
+```bash
+git clone <repo-url>
+cd TTJ_2025/frontend
+```
 
-## Repository Setup
+# Set up Instructions for Backend with UV
+This guide explains how to set up and run the backend of the project using **UV** with **FastAPI**. 
+---
 
-1. Clone the repository:
-	```bash
-	git clone <repo-url>
-	cd TTJ_2025/frontend
-	```
+## Prerequisites 
+- Python 3.10+ installed 
+- uv package manager
 
-## Setup Instructions
+## 1. Install UV if not installed
+```bash
+pip install uv
+```
 
-2. Install dependencies:
-	```bash
-	npm i
-	```
+## 2. Install Dependencies:
+```bash
+cd backend
 
-3. Run the frontend:
-	```bash
-	npm run dev
-	```
+uv sync
+```
 
-After starting the development server, you can access the frontend at:
+## 3. Run backend
+```bash
+uv run fastapi dev main.py
+```
+## After starting the development server, you can access the backend at:
+  ➜ localhost: http://127.0.0.1:8000/docs
 
+# Setup instructions for Frontend
+This guide explains how to set up and run the frontend of the project. 
+---
+
+## 1. Install dependencies:
+```bash
+cd frontend
+npm i
+```
+## 2. Run the frontend:
+```bash
+npm run dev
+```
+
+## After starting the development server, you can access the frontend at:
   ➜  Local:   http://localhost:8080/
 
-## Docker Setup
+# Docker Setup
 
 To run both backend and frontend using Docker Compose:
 
