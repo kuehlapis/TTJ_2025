@@ -27,7 +27,7 @@ export default {
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))',
-					glow: 'hsl(var(--primary-glow))'
+					hover: 'hsl(var(--primary-hover))'
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
@@ -53,13 +53,27 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				success: {
-					DEFAULT: 'hsl(var(--success))',
-					foreground: 'hsl(var(--success-foreground))'
+				// Compliance status colors
+				compliant: {
+					DEFAULT: 'hsl(var(--compliant))',
+					foreground: 'hsl(var(--compliant-foreground))',
+					soft: 'hsl(var(--compliant-soft))'
 				},
-				warning: {
-					DEFAULT: 'hsl(var(--warning))',
-					foreground: 'hsl(var(--warning-foreground))'
+				prohibited: {
+					DEFAULT: 'hsl(var(--prohibited))',
+					foreground: 'hsl(var(--prohibited-foreground))',
+					soft: 'hsl(var(--prohibited-soft))'
+				},
+				'needs-controls': {
+					DEFAULT: 'hsl(var(--needs-controls))',
+					foreground: 'hsl(var(--needs-controls-foreground))',
+					soft: 'hsl(var(--needs-controls-soft))'
+				},
+				// Severity colors
+				severity: {
+					high: 'hsl(var(--severity-high))',
+					medium: 'hsl(var(--severity-medium))',
+					ok: 'hsl(var(--severity-ok))'
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
@@ -71,16 +85,6 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				}
-			},
-			backgroundImage: {
-				'gradient-primary': 'var(--gradient-primary)',
-				'gradient-dashboard': 'var(--gradient-dashboard)',
-				'gradient-card': 'var(--gradient-card)'
-			},
-			boxShadow: {
-				'glow': 'var(--shadow-glow)',
-				'card': 'var(--shadow-card)',
-				'elevated': 'var(--shadow-elevated)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

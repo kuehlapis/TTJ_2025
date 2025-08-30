@@ -1,6 +1,5 @@
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
-
 # from backend.util.config import getConfig
 import sys
 import os
