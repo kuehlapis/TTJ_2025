@@ -11,11 +11,9 @@ class AnalzyerOutput(BaseModel):
     geolocation: str
     law: str
     severity: str
-    confidence: str
     reasoning: str
     potential_violations: str
     evidence: str
     recommendations: str
     legal_references: str
-    citations: str
 
