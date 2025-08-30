@@ -1,10 +1,10 @@
 {
-  "geolocation": "Canada",
-  "law": "N/A",
+  "geolocation": "US-CA",
+  "law": "SB-976 Protecting Our Kids from Social Media Addiction Act",
   "severity": "Low",
-  "reasoning": "The personalized feed variant test is launching in Canada as part of early experimentation. Spanner will isolate affected cohorts, and Glow flags will monitor feature health.",
-  "potential_violations": "Potential violation of Canadian privacy laws if personalized feed exposes sensitive user data without consent.",
-  "evidence": "Canada -first PF (Personalized feed) variant test to launch a PF (Personalized feed) variant in CA as part of early experimentation. Spanner will isolate affected cohorts and Glow flags will monitor feature health.",
-  "recommendations": "Ensure compliance with Canadian privacy laws (PIPEDA) by obtaining user consent for data collection and personalization. Implement data anonymization or pseudonymization techniques to protect user privacy. Regularly monitor Glow flags for any compliance alerts.",
-  "legal_references": "PIPEDA (Personal Information Protection and Electronic Documents Act)."
+  "reasoning": "The app disables Personalization Feed (PF) by default for users under 18 in California, aligning with SB-976's requirement to protect minors from addictive feeds. Parental override is allowed with explicit consent.",
+  "potential_violations": "No violation as long as the default setting is off and parental consent is obtained for enabling PF.",
+  "evidence": "As part of compliance with California’s SB976, the app will disable PF by default for users under 18 located in California. This default setting is considered NR to override, unless explicit parental opt-in is provided.",
+  "recommendations": "Continue to monitor FR logs and ensure accurate geo-detection via GH to maintain compliance.",
+  "legal_references": "SB-976, sections 27001 and 27002"
 }

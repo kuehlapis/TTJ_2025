@@ -25,7 +25,12 @@ const Index = () => {
     setIsAnalyzing(true);
     setError(null);
     setAnalysisResult(null); // Clear previous results before new analysis
-    // Optionally clear any other cached or stale data here
+    // Clear summery.csv before running analysis
+    try {
+      await fetch('http://127.0.0.1:8000/clear-summary', { method: 'POST' });
+    } catch (e) {
+      // Optionally handle error, but continue with analysis
+    }
     try {
       // Always fetch fresh data, avoid cache
       const result = await api.analyze(prompt);
