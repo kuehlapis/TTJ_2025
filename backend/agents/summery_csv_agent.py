@@ -79,22 +79,37 @@ class SummeryCsvAgent(BaseAgent):
 
         # Write to CSV
         try:
+            if isinstance(summary_list, dict):
+                summary_list = [summary_list]
+            # Collect all keys from all rows
+            all_keys = set()
+            for row in summary_list:
+                all_keys.update(row.keys())
+            # Ensure required columns are present and first
+            required_fields = [
+                "geolocation",
+                "severity",
+                "law",
+                "reasoning",
+                "potential_violations",
+                "recommendations",
+                "legal_references",
+                "geo_compliance_flag",
+            ]
+            fieldnames = required_fields + [
+                k for k in all_keys if k not in required_fields
+            ]
             with open(self.output_file, "w", newline="", encoding="utf-8") as csvfile:
-                fieldnames = ["feature", "geo_flag", "reasoning", "regulations"]
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
-                # If summary_list is a dict, convert to list
-                if isinstance(summary_list, dict):
-                    summary_list = [summary_list]
                 for row in summary_list:
-                    writer.writerow(
-                        {
-                            "feature": row.get("law", ""),
-                            "geo_flag": row.get("geolocation", ""),
-                            "reasoning": row.get("reasoning", ""),
-                            "regulations": row.get("legal_references", ""),
-                        }
-                    )
+                    # Add Gemini's geo-specific compliance flag if not present
+                    if "geo_compliance_flag" not in row:
+                        # Example: infer from geolocation or add logic to get from Gemini
+                        row["geo_compliance_flag"] = (
+                            "REQUIRED" if row.get("geolocation") else "NOT REQUIRED"
+                        )
+                    writer.writerow(row)
             print(f"Summary CSV saved to {self.output_file}")
             return self.output_file
         except Exception as e:
