@@ -1,4 +1,9 @@
 
+
+## 📄 Documentation
+
+For full project documentation, see: [Project Docs](https://docs.google.com/document/d/1voDWtOC-vWqSAmjqzOxv-83WxojZyhrVTPsLfnfVrT8/edit?usp=sharing)
+
 # TTJ_2025
 
 ## Repository Setup
