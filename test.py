@@ -1,6 +1,8 @@
 from backend.main import AnalyzerAgentMain, IntakeAgentMain, ExcelMain
 
-def main():
+import asyncio
+
+async def main():
 
     texts = ExcelMain.get_content()
 
@@ -9,11 +11,13 @@ def main():
     region = IntakeAgentMain.extract_region(cleaned_text) #JSON output
 
     # IntakeAgentMain.save_output(cleaned_text, region)
-
-    result = AnalyzerAgentMain.analyze_question(cleaned_text, region)
-
+    print("test")
+    print(region)
+    print(cleaned_text)
     print("\nAnalyzing...")
-    result = AnalyzerAgentMain.analyze_question(question, jurisdiction)
+    result = await AnalyzerAgentMain.analyze_question(cleaned_text, region)
+
+    # result = AnalyzerAgentMain.analyze_question(question, jurisdiction)
 
     if result["status"] == "success":
         print("\nAnalysis Result:")
@@ -23,4 +27,4 @@ def main():
         print(f"\nError: {result['error']}")
 
 if __name__ == '__main__':
-    main()
+    asyncio.run(main())

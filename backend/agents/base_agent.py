@@ -1,6 +1,6 @@
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
-from backend.util.config import getConfig
+from backend.util.config import getConfig  # Updated import path
 from typing import Type, TypeVar
 import yaml
 from pydantic import BaseModel
