@@ -1,5 +1,5 @@
-## LeCompliance
-A prototype system that utilizes LLM capabilities to flag features that require geo-specific compliance logic.
+# LeCompliance
+Lecompliance is a prototype system that utilizes LLM capabilities to flag features that require geo-specific compliance logic.
 
 ## 📄 Documentation
 
