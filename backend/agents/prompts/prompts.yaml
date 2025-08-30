@@ -219,6 +219,7 @@ prompts:
       "evidence": str
       "recommendations": str
       "legal_references": str
+      "citations": str
     }
     
 

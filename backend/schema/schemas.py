@@ -17,4 +17,5 @@ class AnalzyerOutput(BaseModel):
     evidence: str
     recommendations: str
     legal_references: str
+    citations: str
 

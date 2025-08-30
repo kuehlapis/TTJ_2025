@@ -6,18 +6,16 @@ from backend.agents.intake_agent import IntakeAgent
 from backend.service.excel_service import ExcelService
 from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from backend.main import AnalyzerAgentMain, IntakeAgentMain, ExcelMain
 import json
 import asyncio
 
-
+# Initialize services and agents
 RuleBook = RulebookRepository()
 CrawlerMain = CrawlerService()
 ExcelMain = ExcelService()
 LegalAgentMain = LegalAgent()
 AnalyzerAgentMain = AnalyzerAgent()
 IntakeAgentMain = IntakeAgent()
-
 
 app = FastAPI()
 

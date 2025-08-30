@@ -1,8 +1,10 @@
-from backend.main import AnalyzerAgentMain, IntakeAgentMain, ExcelMain
+from backend.main import ExcelMain, IntakeAgentMain
+from backend.agents.analyzer_agent import AnalyzerAgent
 import json
 import asyncio
 
 async def main():
+    analyzer = AnalyzerAgent()  # Create instance here instead of importing from main
 
     texts = ExcelMain.get_content()
     print(texts)
@@ -12,7 +14,7 @@ async def main():
 
     # IntakeAgentMain.save_output(cleaned_text, region)
     print("\nAnalyzing...")
-    result = await AnalyzerAgentMain.analyze_question(cleaned_text, region)
+    result = await analyzer.analyze_question(cleaned_text, region)
     print(result.model_dump())
 
     # Write result to JSON file
