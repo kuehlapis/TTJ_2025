@@ -1,5 +1,3 @@
-
-
 ## 📄 Documentation
 
 For full project documentation, see: [Project Docs](https://docs.google.com/document/d/1voDWtOC-vWqSAmjqzOxv-83WxojZyhrVTPsLfnfVrT8/edit?usp=sharing)
@@ -16,12 +14,44 @@ For full project documentation, see: [Project Docs](https://docs.google.com/docu
 
 ## Setup Instructions
 
-2. Install dependencies:
+# Project Backend Setup with UV 
+This guide explains how to set up and run the backend of the project using **UV** with **FastAPI**. 
+---
+
+## Prerequisites 
+- Python 3.10+ installed 
+- uv package manager
+
+## Install UV if not installed
+```bash
+pip install uv
+```
+## Backend
+2. Install Dependencies:
 	```bash
+	cd backend
+
+	uv sync
+	```
+
+3.	Run backend
+
+	uv run fastapi dev main.py
+
+	localhost: http://127.0.0.1:8000/docs
+
+# Project Frontend Setup 
+This guide explains how to set up and run the frontend of the project. 
+---
+
+## Frontend
+4. Install dependencies:
+	```bash
+	cd frontend
 	npm i
 	```
 
-3. Run the frontend:
+5. Run the frontend:
 	```bash
 	npm run dev
 	```

@@ -1,11 +1,14 @@
-# to install uv
+## Prerequisites 
+- Python 3.10+ installed 
+- uv package manager
+
+# To install uv
 ```bash
 pip install uv
 ```
 
 # To run backend
 ```bash
-cd backend
 uv sync
 uv run fastapi dev main.py
 ```
