@@ -1,13 +1,20 @@
 from backend.agents.legal_agent import LegalAgent
 from backend.repository.rulebook_repo import RulebookRepository
 from backend.service.crawler_service import CrawlerService
+from backend.agents.analyzer_agent import AnalyzerAgent
+from backend.agents.intake_agent import IntakeAgent
+from backend.service.excel_service import ExcelService
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 
 RuleBook = RulebookRepository()
-LegalAgentMain = LegalAgent()
 CrawlerMain = CrawlerService()
+ExcelMain = ExcelService()
+LegalAgentMain = LegalAgent()
+AnalyzerAgentMain = AnalyzerAgent()
+IntakeAgentMain = IntakeAgent()
+
 
 app = FastAPI()
 

@@ -7,13 +7,15 @@ class LegalAgent(BaseAgent):
         super().__init__()
 
     def extract_legals(self, markdown_output: str) -> str:
-        system_prompt = self.get_system_prompt("legal_agent")
+        try:
+            system_prompt = self.get_system_prompt("legal_agent")
+        except Exception as e:
+            print(f"Error getting prompt for LegalAgent: {e}")
 
         try:
             yaml_str = self.run(system_prompt, markdown_output)
             yaml_str = self.clean_yaml(yaml_str)
             return yaml_str
-
         except Exception as e:
             raise ValueError(f"Error during extraction of legal abstract: {e}")
 
