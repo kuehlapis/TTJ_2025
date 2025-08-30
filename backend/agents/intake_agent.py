@@ -51,7 +51,7 @@ class IntakeAgent(BaseAgent):
             if response.states:
                 response.states = f"{response.country}-{response.states}"
 
-            return response
+            return response.model_dump()
         except Exception as e:
             print(f"Error getting response from intake agent: {e}")
             return None

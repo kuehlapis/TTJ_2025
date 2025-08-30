@@ -2,8 +2,7 @@ from backend.agents.base_agent import BaseAgent
 import yaml
 from datetime import datetime
 import os
-import json
-from typing import List, Dict
+from typing import List, Dict, Any
 
 
 class AnalyzerAgent(BaseAgent):
@@ -29,14 +28,14 @@ class AnalyzerAgent(BaseAgent):
         except Exception as e:
             raise ValueError(f"Failed to initialize AnalyzerAgent: {str(e)}")
 
-    def extract_region(self, jurisdiction: dict) -> dict:
+    def extract_region(self, jurisdiction: dict) -> List[str]:
         result = []
         result.append(jurisdiction["country"])
         result.append(jurisdiction["continent"])
-        result.append(jurisdiction["state"])
+        result.append(jurisdiction["states"])
         return result
 
-    def extract_legal(self, region: List[str]) -> Dict[str]:
+    def extract_legal(self, region: List[str]) -> Dict[str, Any]:
         result = {}
 
         for i in region:
@@ -46,25 +45,37 @@ class AnalyzerAgent(BaseAgent):
                 continue
         return result
 
-    async def analyze_question(self, user_input: str, jurisdiction: dict) -> dict:
-        """Process user's input using the QA template and legalbook"""
+    def _wrap_question(self, question: str, jurisdiction: str = None) -> str:
+        """Simply combine the question with jurisdiction if provided"""
+        region_lists = self.extract_region(jurisdiction)
+        legal_json = self.extract_legal(region_lists)
+        print(legal_json)
+
+        if jurisdiction:
+            return f"Referencing the legal compliance: {legal_json}\n for jurisdiction {jurisdiction} check for violation: {question}."
+
+        return question
+
+    async def analyze_question(
+        self, user_input: str, jurisdiction: dict
+    ) -> Dict[str, Any]:
+        """Process user's input using the system prompt"""
         try:
-            system_prompt = self.get_system_prompt("analyser_agent")
+            system_prompt = self.get_system_prompt("analyzer_agent")
 
             formatted_question = self._wrap_question(user_input, jurisdiction)
-
             response = self.run(system_prompt, formatted_question)
+            return response
+            # print("\nDebug - Raw Response:")
 
-            print("\nDebug - Raw Response:")
+            # structured = self._structure_response(response)
 
-            structured = self._structure_response(response)
-
-            return {
-                "status": "success",
-                "question": user_input,
-                "analysis": structured,
-                "timestamp": datetime.now().isoformat(),
-            }
+            # return {
+            #     "status": "success",
+            #     "question": user_input,
+            #     "analysis": structured,
+            #     "timestamp": datetime.now().isoformat(),
+            # }
         except Exception as e:
             print(f"Error in analyze_question: {str(e)}")
             return {
@@ -73,73 +84,64 @@ class AnalyzerAgent(BaseAgent):
                 "timestamp": datetime.now().isoformat(),
             }
 
-    def _wrap_question(self, question: str, jurisdiction: str = None) -> str:
-        """Wrap the user question in the QA template"""
-        region_list = self.extract_legal(jurisdiction)
-        legal_json = self.extract_legal(region_list)
-        kb_yaml = yaml.dump(legal_json) if legal_json else self.legalbook
-
-        return self.qa_template.format(
-            YYYY_MM_DD=datetime.now().strftime("%Y-%m-%d"),
-            JURISDICTION_HINT=jurisdiction or "",
-            RAW_USER_INPUT=question,
-            KB_YAML_SNIPPETS=kb_yaml,
-        )
-
-    def _structure_response(self, response: str) -> dict:
+    def _structure_response(self, response: str) -> Dict[str, Any]:
         """Parse and structure the LLM response"""
         try:
             # Default structure
             analysis_dict = {
                 "feature": "",
                 "description": "No description provided",
-                "analysis": "No analysis provided",
+                "analysis": "",
                 "risk": "MEDIUM",
                 "regulations": [],
-                "recommendation": "No recommendation provided",
+                "recommendation": "",
+                "details": {
+                    "legal_requirements": [],
+                    "feature_analysis": [],
+                    "jurisdictional_notes": "",
+                    "compliance_tasks": [],
+                },
             }
 
-            # Clean up the response
-            cleaned_response = (
-                response.replace("```json", "").replace("```", "").strip()
-            )
+            # Parse sections from the response
+            sections = response.split("\n\n")
+            # current_section = None
 
-            # Try to parse as JSON first
-            try:
-                if cleaned_response.startswith("{"):
-                    parsed = json.loads(cleaned_response)
-                    # Update only valid fields
-                    for key in analysis_dict.keys():
-                        if key in parsed and parsed[key]:
-                            analysis_dict[key] = parsed[key]
-                    return analysis_dict
-            except json.JSONDecodeError:
-                pass
+            for section in sections:
+                if "Legal Requirements & Obligations" in section:
+                    # Extract regulations
+                    for line in section.split("\n"):
+                        if "**" in line and ":" in line:
+                            reg = line.split(":", 1)[0].strip("* ")
+                            analysis_dict["regulations"].append(reg)
 
-            # Fallback to line-by-line parsing
-            # current_key = None
-            # current_value = []
+                elif "Feature Analysis" in section:
+                    # Extract feature details and risks
+                    analysis_dict["analysis"] = section.strip()
+                    # Determine risk level based on content
+                    if "HIGH" in section.upper() or "CRITICAL" in section.upper():
+                        analysis_dict["risk"] = "HIGH"
 
-            for line in cleaned_response.split("\n"):
-                line = line.strip()
-                if not line:
-                    continue
+                elif "Actionable Analysis & Recommendations" in section:
+                    # Extract recommendations
+                    recommendations = []
+                    for line in section.split("\n"):
+                        if "|" in line and "Recommendation" in line:
+                            rec = line.split("|")[-1].strip()
+                            recommendations.append(rec)
+                    analysis_dict["recommendation"] = "\n".join(recommendations)
 
-                # Check for key indicators
-                if ":" in line:
-                    key, value = line.split(":", 1)
-                    key = key.strip().lower().replace('"', "")
-                    value = value.strip().strip('"').strip(",")
+                elif "Ongoing Compliance" in section:
+                    # Add compliance tasks
+                    for line in section.split("\n"):
+                        if line.strip().startswith("*"):
+                            analysis_dict["details"]["compliance_tasks"].append(
+                                line.strip("* ")
+                            )
 
-                    if key in analysis_dict:
-                        if key == "regulations":
-                            if "[" in value:
-                                regs = value.strip("[]").split(",")
-                                analysis_dict["regulations"].extend(
-                                    r.strip().strip('"') for r in regs if r.strip()
-                                )
-                        else:
-                            analysis_dict[key] = value
+            # If no structured data was found, use the raw response
+            if not any(analysis_dict["regulations"]):
+                analysis_dict["analysis"] = response
 
             return analysis_dict
 
@@ -152,9 +154,10 @@ class AnalyzerAgent(BaseAgent):
                 "risk": "HIGH",
                 "regulations": [],
                 "recommendation": "Please review input and try again",
+                "details": {},
             }
 
-    async def analyze_from_file(self, input_file: str) -> dict:
+    async def analyze_from_file(self, input_file: str) -> Dict[str, Any]:
         """Analyze case from text file"""
         try:
             with open(input_file, "r") as file:
@@ -162,6 +165,7 @@ class AnalyzerAgent(BaseAgent):
 
             # Process single text input
             result = await self.analyze_question(query, "EU")
+            print(result)
             return (
                 result["analysis"]
                 if result["status"] == "success"
@@ -183,29 +187,3 @@ class AnalyzerAgent(BaseAgent):
                 "regulations": [],
                 "recommendation": "Check input file and try again",
             }
-
-
-# async def main():
-#     try:
-#         analyzer = AnalyzerAgent()
-#         input_file = os.path.join(os.path.dirname(__file__), '..', 'data', 'test_inputs.txt')
-#         result = await analyzer.analyze_from_file(input_file)
-
-#         print("\nAnalysis Results:")
-#         print("================")
-#         print(f"Feature: {result.get('feature', 'Not specified')}")
-#         print(f"Description: {result.get('description', 'No description')}")
-#         print(f"Analysis: {result.get('analysis', 'No analysis')}")
-#         print(f"Risk Level: {result.get('risk', 'Not assessed')}")
-#         print("Regulations:")
-#         for reg in result.get('regulations', []):
-#             print(f"  - {reg}")
-#         print(f"Recommendation: {result.get('recommendation', 'No recommendation')}")
-#         print("-" * 50)
-
-#     except Exception as e:
-#         print(f"Error: {str(e)}")
-
-# if __name__ == "__main__":
-#     import asyncio
-#     asyncio.run(main())
