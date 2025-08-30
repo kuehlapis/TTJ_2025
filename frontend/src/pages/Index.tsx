@@ -10,7 +10,10 @@ import { SeverityBadge } from "@/components/SeverityBadge";
 import { LoadingSkeleton } from "@/components/LoadingSkeleton";
 import { api, AnalysisResult, ComplianceResult, ApiError } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
-import { Search, Filter, Download, RotateCcw, Shield, AlertTriangle } from "lucide-react";
+import { Search, Filter, Download, RotateCcw, AlertTriangle } from "lucide-react";
+
+// Import the geo-bot icon
+import geoBotIcon from "/public/geo-bot-icon (1).png";
 
 const Index = () => {
   const [prompt, setPrompt] = useState("");
@@ -120,7 +123,7 @@ const Index = () => {
       <header className="border-b bg-card/50 backdrop-blur">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center space-x-3">
-            <Shield className="h-8 w-8 text-primary" />
+            <img src={geoBotIcon} alt="Geo Bot" className="h-8 w-8" />
             <h1 className="text-3xl font-bold text-foreground">
               Geo-Compliance Auto-Screen
             </h1>
