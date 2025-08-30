@@ -195,7 +195,16 @@ prompts:
 
   Output YAML only.
   """
-
-
   
-  
+ summery_csv_agent: |
+    Summarize the following TikTok compliance analysis for geo-specific logic.
+    For each feature, output:
+      1. Flag whether this feature needs geo-specific compliance logic (output as 'geo_compliance_flag', REQUIRED)
+      2. Clear Reasoning (output as 'reasoning', REQUIRED)
+      3. Severity (output as 'severity')
+      4. Law (output as 'law')
+      5. Potential Violations (output as 'potential_violations')
+      6. Recommendations (output as 'recommendations')
+      7. Legal References (output as 'legal_references')
+    Focus on geolocation-specific compliance checks for TikTok.
+    Return as a list of dicts with keys: 'geo_compliance_flag', 'reasoning', 'severity', 'law', 'potential_violations', 'recommendations', 'legal_references', plus any other relevant context.
