@@ -15,7 +15,7 @@ import { Search, Filter, Download, RotateCcw, Shield, AlertTriangle } from "luci
 const Index = () => {
   const [prompt, setPrompt] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
+    const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null); // Clear previous results before new analysis
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
@@ -24,9 +24,11 @@ const Index = () => {
     
     setIsAnalyzing(true);
     setError(null);
-    
+    setAnalysisResult(null); // Clear previous results before new analysis
+    // Optionally clear any other cached or stale data here
     try {
-      const result = await api.analyze();
+      // Always fetch fresh data, avoid cache
+      const result = await api.analyze(prompt);
       setAnalysisResult(result);
       toast({
         title: "Analysis Complete",
@@ -46,9 +48,10 @@ const Index = () => {
   };
 
   const handleReset = () => {
-    setPrompt("");
-    setAnalysisResult(null);
-    setError(null);
+      setPrompt("");
+      setAnalysisResult(null);
+      setError(null);
+      // Add any additional state resets here if needed
   };
 
   const handleDownloadJSON = async () => {
