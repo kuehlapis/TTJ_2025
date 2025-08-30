@@ -52,15 +52,11 @@ class AnalyzerAgent(BaseAgent):
             system_prompt = self.get_system_prompt("analyser_agent")
 
             formatted_question = self._wrap_question(user_input, jurisdiction)
-            print(formatted_question)
 
             response = self.run(system_prompt, formatted_question)
 
-            # Debug the raw response
             print("\nDebug - Raw Response:")
-            print(response)
 
-            # Structure the response immediately
             structured = self._structure_response(response)
 
             return {
@@ -79,7 +75,9 @@ class AnalyzerAgent(BaseAgent):
 
     def _wrap_question(self, question: str, jurisdiction: str = None) -> str:
         """Wrap the user question in the QA template"""
-        kb_yaml = yaml.dump(self.legalbook) if self.legalbook else ""
+        region_list = self.extract_legal(jurisdiction)
+        legal_json = self.extract_legal(region_list)
+        kb_yaml = yaml.dump(legal_json) if legal_json else self.legalbook
 
         return self.qa_template.format(
             YYYY_MM_DD=datetime.now().strftime("%Y-%m-%d"),

@@ -196,7 +196,7 @@ prompts:
   Output YAML only.
   """
  analyzer_agent: | 
-    You are a legal compliance analyzer. Your task is to:
+    You are a {region} legal compliance analyzer. Your task is to:
     1. Analyze features/products against legal requirements
     2. Extract relevant obligations from legal knowledge base
     3. Assess compliance risks and provide recommendations

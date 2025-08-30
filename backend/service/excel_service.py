@@ -12,5 +12,6 @@ class ExcelService:
             print(f"Error fetching dataset:{e}")
 
     def get_content(self):
-        row_contents = self.df.iloc[0, :2].tolist()  # converts the row to a list
-        return row_contents
+        row_contents = self.df.iloc[0, :2].tolist()
+        input_text = ".".join(filter(None, row_contents))
+        return input_text.strip()
