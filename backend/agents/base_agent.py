@@ -1,10 +1,9 @@
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
-#from backend.util.config import getConfig  # Updated import path
+from backend.util.config import getConfig  # Updated import path
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'util')))
-from config import getConfig
 from typing import Type, TypeVar
 import yaml
 from pydantic import BaseModel
