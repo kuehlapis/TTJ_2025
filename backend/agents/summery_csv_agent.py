@@ -14,7 +14,7 @@ class SummeryCsvAgent(BaseAgent):
     def __init__(self):
         super().__init__()
         self.input_file = os.path.join(
-            os.path.dirname(__file__), "..", "json_dump", "analyser_agent_test.json"
+            os.path.dirname(__file__), "..", "json_dump", "analyzer_output.json"
         )
         self.output_file = os.path.join(
             os.path.dirname(__file__), "outputs", "summery.csv"
