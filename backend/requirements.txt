@@ -1,38 +1,46 @@
-# Minimal MVP
-fastapi[standard]
+
+# All required dependencies for backend project (from pyproject.toml)
+browser-use>=0.7.0
+crawl4ai>=0.7.4
+fastapi[standard]>=0.116.1
+langchain>=0.3.27
+langchain-google-genai>=2.1.10
+markdownify>=1.1.0
+pydantic>=2.11.7
+requests>=2.32.5
+ruff>=0.12.10
 uvicorn[standard]
-pydantic
 
 # ---- comment-in as you build features ----
-# # DB
-# motor
-# beanie
-# SQLAlchemy
-# psycopg[binary]
+# DB
+motor
+beanie
+SQLAlchemy
+psycopg[binary]
 
-# # Auth
-# python-jose[cryptography]
-# passlib[bcrypt]
-# email-validator
+# Auth
+python-jose[cryptography]
+passlib[bcrypt]
+email-validator
 
-# # Files / S3
-# boto3
-# python-multipart
-# aiofiles
+# Files / S3
+boto3
+python-multipart
+aiofiles
 
-# # Observability
-# structlog
-# opentelemetry-sdk
+# Observability
+structlog
+opentelemetry-sdk
 
-# # LLM/VLM
-# pillow
-# numpy
-# # vllm
-# # transformers
+# LLM/VLM
+pillow
+numpy
+# vllm
+# transformers
 
-# # Async utils
-# aiohttp
+# Async utils
+aiohttp
 
-# # Reporting
-# pandas
-# reportlab
+# Reporting
+pandas
+reportlab

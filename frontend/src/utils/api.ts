@@ -12,19 +12,18 @@ export async function analyzeFeature(request: AnalysisRequest): Promise<Analysis
   }
 
   try {
-    const response = await fetch(`${API_BASE}/analyze`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    });
+    // Call backend /api/analyze?text=...
+    const response = await fetch(`${API_BASE}/analyze?text=${encodeURIComponent(request.raw_text)}`);
 
     if (!response.ok) {
       throw new Error(`API error: ${response.status} ${response.statusText}`);
     }
 
-    return response.json();
+    const result = await response.json();
+    if (result.status !== "success" || !result.data) {
+      throw new Error(result.message || "Analysis failed");
+    }
+    return result.data;
   } catch (error) {
     console.error("API call failed:", error);
     throw error;

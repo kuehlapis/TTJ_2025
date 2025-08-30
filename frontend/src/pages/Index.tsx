@@ -34,9 +34,10 @@ const Index = () => {
     setError(null);
     
     try {
+      // Call analyzeFeature which now uses /api/analyze
       const result = await analyzeFeature({ raw_text: inputText });
       setAnalysisResult(result);
-      
+
       // Initialize review states to "Confirm" for all findings
       const initialReviewStates: Record<string, ReviewStatus> = {};
       result.findings.forEach(finding => {
@@ -52,7 +53,7 @@ const Index = () => {
       setError(err instanceof Error ? err.message : "Analysis failed. Please try again.");
       toast({
         title: "Analysis Failed",
-        description: "There was an error analyzing your feature. Please try again.",
+        description: err instanceof Error ? err.message : "There was an error analyzing your feature. Please try again.",
         variant: "destructive",
       });
     } finally {
